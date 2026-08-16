@@ -1,0 +1,6 @@
+@SpooLLedger_HostAddress = http://localhost:5165
+
+GET {{SpooLLedger_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
