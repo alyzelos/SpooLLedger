@@ -1,14 +1,24 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpooLLedger", "SpooLLedger.csproj", "{FAA794BC-A815-211A-7AAA-AA38B8616824}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FAA794BC-A815-211A-7AAA-AA38B8616824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAA794BC-A815-211A-7AAA-AA38B8616824}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAA794BC-A815-211A-7AAA-AA38B8616824}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAA794BC-A815-211A-7AAA-AA38B8616824}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED9A0B95-78C8-4713-A468-3733B33FC0E4}
 	EndGlobalSection
 EndGlobal
