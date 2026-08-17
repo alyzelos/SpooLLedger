@@ -30,9 +30,11 @@ yarn-error.log*
 ####################################
 # Explicit project paths
 ####################################
-SpooLLedger/API/bin/
-SpooLLedger/API/obj/
-SpooLLedger/API/.vs/
-SpooLLedger/API/.vscode/
-SpooLLedger/node_modules/
-SpooLLedger/client/node_modules/
+SpooLLedger/bin/
+SpooLLedger/obj/
+.vs/
+.vscode/
+
+
+
+/SpooLLedger/stock.db
