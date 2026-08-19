@@ -37,4 +37,6 @@ SpooLLedger/obj/
 
 
 
-/SpooLLedger/stock.db
+SpooLLedger/stock.db
+SpooLLedger/stock.db-shm
+SpooLLedger/stock.db-wal
