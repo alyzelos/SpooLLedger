@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SpooLLedger.Data.DatabaseContext;
-using SpooLLedger.Entities;
+using SpooLLedger.Domain;
+using SpooLLedger.Infrastructure.Data.DatabaseContext;
 
 namespace SpooLLedger.Controllers
 {

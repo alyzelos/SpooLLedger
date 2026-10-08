@@ -13,9 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Data\DataContext\" />
-    <Folder Include="Entities\" />
+    <ProjectReference Include="..\SpooLLedger.Application\SpooLLedger.Application.csproj" />
+    <ProjectReference Include="..\SpooLLedger.Infrastructure\SpooLLedger.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

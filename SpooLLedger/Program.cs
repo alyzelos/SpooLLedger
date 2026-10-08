@@ -1,6 +1,6 @@
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
-using SpooLLedger.Data.DatabaseContext;
+using SpooLLedger.Infrastructure.Data.DatabaseContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
