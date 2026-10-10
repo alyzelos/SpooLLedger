@@ -8,7 +8,7 @@
       <p>No filament records yet.</p>
     } @else {
       @for (item of stock(); track item.id) {
-        <p>{{ item.producer }} — {{ item.type }}</p>
+        <p>{{ item.producer }} — {{ item.type }} — {{ item.color }} — {{ item.quantity }}</p>
       }
     }
   </p-card>

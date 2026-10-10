@@ -6,6 +6,8 @@ export interface FilamentStock {
   id: number;
   producer: string | null;
   type: string | null;
+  color: string | null;
+  quantity: number;
 }
 
 @Component({
