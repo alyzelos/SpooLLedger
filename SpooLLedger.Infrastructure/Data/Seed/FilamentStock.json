@@ -1,0 +1,26 @@
+[
+  {
+    "producer": "Prusament",
+    "type": "PLA",
+    "color": "Oh My Gold",
+    "quantity": 900
+  },
+  {
+    "producer": "Prusament",
+    "type": "PLA",
+    "color": "Azure Blue",
+    "quantity": 400
+  },
+  {
+    "producer": "Prusament",
+    "type": "PLA",
+    "color": "Lipstick Red",
+    "quantity": 550
+  },
+  {
+    "producer": "Prusament",
+    "type": "PLA",
+    "color": "Blend My Silverness",
+    "quantity": 300
+  }
+]

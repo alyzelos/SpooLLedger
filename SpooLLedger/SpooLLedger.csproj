@@ -17,4 +17,10 @@
     <ProjectReference Include="..\SpooLLedger.Infrastructure\SpooLLedger.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\FilamentStock.json" Link="Data\Seed\FilamentStock.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
-using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using SpooLLedger.Infrastructure.Data.DatabaseContext;
+using SpooLLedger.Infrastructure.Data.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +18,22 @@ builder.Services.AddCors();
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<DataContext>();
+        await context.Database.MigrateAsync();
+        await DataSeeder.SeedFilamentStock(context);
+    }
+    catch
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError("An error occurend during migration");
+    }
+}
 
 // Configure the HTTP request pipeline.
 
