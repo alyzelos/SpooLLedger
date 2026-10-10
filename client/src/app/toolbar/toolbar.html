@@ -1,21 +1,31 @@
-        <p-toolbar [pt]="{ start: { class: 'flex-wrap' } }" [style]="{ 'border-radius': '3rem', padding: '0.75rem 1rem 0.75rem 1.5rem', background: 'var(--p-surface-900)', border: 'none' }">
-            <ng-template #start>
-                <div class="flex items-center gap-1">
-                    <i class="pi pi-prime text-xl" style="color: var(--p-primary-400)"></i>
-                    <span class="font-bold text-lg ml-2" style="color: var(--p-surface-0)">Brand</span>
+<p-toolbar [pt]="{ start: { class: 'flex-wrap' } }" [style]="{ 'border-radius': '3rem', padding: '0.75rem 1rem 0.75rem 1.5rem', background: 'color-mix(in srgb, var(--p-surface-900) 85%, transparent)', border: 'none' }">
+    <ng-template #start>
+        <div class="flex items-center gap-1">
+            <i class="pi pi-prime text-xl" style="color: var(--p-primary-400)"></i>
+            <span class="font-bold text-lg ml-2" style="color: var(--p-surface-0)">SpoolLedger</span>
+        </div>
+        <div class="ml-6 flex flex-wrap gap-1">
+            <button pButton variant="text" size="small" class="text-surface-0! hover:bg-surface-700!">Filament Stock</button>
+            <button pButton variant="text" size="small" class="text-surface-0! hover:bg-surface-700!">Orders</button>
+            <button pButton variant="text" size="small" class="text-surface-0! hover:bg-surface-700!">Resources</button>
+            <button pButton variant="text" size="small" class="text-surface-0! hover:bg-surface-700!">Pricing</button>
+        </div>
+    </ng-template>
+    <ng-template #end>
+        <div class="flex items-center gap-2">
+            <button type="button" aria-label="Primary color" (click)="palette.toggle($event)" style="display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: 9999px; background: transparent; cursor: pointer;">
+                <span style="display: block; width: 1rem; height: 1rem; border-radius: 9999px; background: var(--p-primary-color)"></span>
+            </button>
+            <p-popover #palette>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; width: 13rem;">
+                    @for (color of colors; track color.name) {
+                        <button type="button" [attr.aria-label]="color.name" [style.background]="color.value" (click)="selectPrimary(color.name); palette.hide()" style="width: 1.25rem; height: 1.25rem; padding: 0; border: 0; border-radius: 9999px; cursor: pointer;"></button>
+                    }
                 </div>
-                <div class="ml-6 flex flex-wrap gap-1">
-                    <button pButton variant="text" size="small" class="text-surface-0! hover:bg-surface-700!">Products</button>
-                    <button pButton variant="text" size="small" class="text-surface-0! hover:bg-surface-700!">Solutions</button>
-                    <button pButton variant="text" size="small" class="text-surface-0! hover:bg-surface-700!">Resources</button>
-                    <button pButton variant="text" size="small" class="text-surface-0! hover:bg-surface-700!">Pricing</button>
-                </div>
-            </ng-template>
-            <ng-template #end>
-                <div class="flex items-center gap-2">
-                    <!-- <button pButton variant="text" size="small" iconOnly aria-label="Search" class="text-surface-0! hover:bg-surface-700!"><svg data-p-icon="search" /></button> -->
-                    <button pButton severity="contrast" size="small">Get Started</button>
-                    <p-avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
-                </div>
-            </ng-template>
-        </p-toolbar>
+            </p-popover>
+            <button pButton type="button" [text]="true" size="small" class="text-surface-0!" [icon]="dark() ? 'pi pi-sun' : 'pi pi-moon'" [attr.aria-label]="dark() ? 'Switch to light mode' : 'Switch to dark mode'" (click)="toggleDarkMode()"></button>
+            <button pButton severity="contrast" size="small">Get Started</button>
+            <p-avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
+        </div>
+    </ng-template>
+</p-toolbar>

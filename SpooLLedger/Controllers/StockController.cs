@@ -10,6 +10,7 @@ namespace SpooLLedger.Controllers
     [ApiController]
     public class StockController(DataContext dataContext) : ControllerBase
     {
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<FilamentStock>>> GetFilament()
         {
             var stocks = await dataContext.FilamentStocks.ToListAsync();

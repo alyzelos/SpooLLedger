@@ -1,1 +1,15 @@
-<p>home works!</p>
+<div class="p-6">
+  <p-card header="Filament stock">
+    @if (error()) {
+      <p>{{ error() }}</p>
+    } @else if (stock() === null) {
+      <p>Loading stock...</p>
+    } @else if (stock()!.length === 0) {
+      <p>No filament records yet.</p>
+    } @else {
+      @for (item of stock(); track item.id) {
+        <p>{{ item.producer }} — {{ item.type }}</p>
+      }
+    }
+  </p-card>
+</div>

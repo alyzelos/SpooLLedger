@@ -1,5 +1,4 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Toolbar } from './toolbar/toolbar';
 
@@ -9,17 +8,6 @@ import { Toolbar } from './toolbar/toolbar';
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App implements OnInit {
+export class App {
   protected readonly title = signal('client');
-  http = inject(HttpClient);
-  stock: any;
-  
-  ngOnInit(): void {
-    this.http.get('https://localhost:5001/api/stock').subscribe({
-      next: response => this.stock = response,
-      error: error => console.log(error),
-      complete: ()=> console.info('the request has been completed')
-    });
-  }
-
 }
