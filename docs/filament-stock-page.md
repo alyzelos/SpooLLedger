@@ -11,7 +11,7 @@ The filament stock card lives on its own Angular page. Home shows the photos fro
 | `/` | `Home` | Photos `/017.jpg`, `/080.jpg`, and `/136.jpg` in one band under the toolbar, with an intro card 50px below the toolbar |
 | `/filament-stock` | `FilamentStockPage` | PrimeNG card with the stock list |
 
-The toolbar **Filament Stock** button navigates to `/filament-stock`.
+The toolbar **Filament Stock** button navigates to `/filament-stock`. The home icon, between dark mode and **Get Started**, navigates to `/`.
 
 ## How the list is loaded
 

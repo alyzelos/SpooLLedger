@@ -8,5 +8,5 @@ import { CardModule } from 'primeng/card';
   styleUrl: './home.css',
 })
 export class Home {
-  protected readonly images = ['/017.jpg', '/080.jpg', '/136.jpg'];
+  protected readonly images = ['/008.jpg', '/017.jpg', '/136.jpg'];
 }

@@ -25,6 +25,7 @@
                 </div>
             </p-popover>
             <button pButton type="button" [text]="true" size="small" class="text-surface-0!" [icon]="dark() ? 'pi pi-sun' : 'pi pi-moon'" [attr.aria-label]="dark() ? 'Switch to light mode' : 'Switch to dark mode'" (click)="toggleDarkMode()"></button>
+            <button pButton type="button" [text]="true" size="small" class="text-surface-0!" icon="pi pi-home" aria-label="Home" routerLink="/"></button>
             <button pButton severity="contrast" size="small">Get Started</button>
             <p-avatar image="/avatar.png"  shape="circle" />
         </div>

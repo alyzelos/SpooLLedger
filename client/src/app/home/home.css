@@ -11,7 +11,7 @@
   top: 50px;
   left: 50%;
   z-index: 1;
-  width: min(36rem, calc(100% - 2rem));
+  width: min(50rem, calc(100% - 2rem));
   transform: translateX(-50%);
 }
 
