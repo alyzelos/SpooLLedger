@@ -7,6 +7,11 @@ public class CreateFilamentStockValidator : AbstractValidator<CreateFilamentStoc
 {
     public CreateFilamentStockValidator()
     {
-        FilamentStockRules.ApplyStockRules(RuleFor(x => x.Producer), RuleFor(x => x.Type), RuleFor(x => x.Color), RuleFor(x => x.Quantity));
+        FilamentStockRules.ApplyStockRules(
+            RuleFor(x => x.Producer),
+            RuleFor(x => x.Type), 
+            RuleFor(x => x.Color), 
+            RuleFor(x => x.Quantity)
+        );
     }
 }
