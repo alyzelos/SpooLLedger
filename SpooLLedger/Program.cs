@@ -1,4 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using SpooLLedger.Application;
+using SpooLLedger.Exceptions;
+using SpooLLedger.Infrastructure;
 using SpooLLedger.Infrastructure.Data.DatabaseContext;
 using SpooLLedger.Infrastructure.Data.Seed;
 
@@ -7,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddDbContext<DataContext>(opt =>
 {
@@ -37,6 +44,7 @@ using (var scope = app.Services.CreateScope())
 
 // Configure the HTTP request pipeline.
 
+app.UseExceptionHandler();
 app.UseCors(x=> x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200"));
 app.UseHttpsRedirection();
 
