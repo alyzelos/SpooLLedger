@@ -8,7 +8,7 @@ The filament stock card lives on its own Angular page. Home shows the photos fro
 
 | Path | Component | What it shows |
 | --- | --- | --- |
-| `/` | `Home` | Photos `/017.jpg`, `/080.jpg`, and `/136.jpg` in one band under the toolbar |
+| `/` | `Home` | Photos `/017.jpg`, `/080.jpg`, and `/136.jpg` in one band under the toolbar, with an intro card 50px below the toolbar |
 | `/filament-stock` | `FilamentStockPage` | PrimeNG card with the stock list |
 
 The toolbar **Filament Stock** button navigates to `/filament-stock`.
@@ -20,6 +20,8 @@ The toolbar **Filament Stock** button navigates to `/filament-stock`.
 ## Home photos
 
 The three `.jpg` files in `client/public` sit in a full-width row directly under the toolbar. The row is 550px tall. Each photo fills its third of the width with `object-fit: cover`. `spoolicon.png` and `avatar.png` stay on the toolbar.
+
+A PrimeNG card sits on top of that row, 50px below the toolbar and centered. It holds a short description of the app, two tips, a rough note that filament is seed data only, and a note that orders are not implemented.
 
 ## Where the pieces live
 
