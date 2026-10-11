@@ -1,0 +1,13 @@
+.hero {
+  display: flex;
+  width: 100%;
+  height: 550px;
+  overflow: hidden;
+}
+
+.hero img {
+  flex: 1 1 0;
+  width: 0;
+  height: 100%;
+  object-fit: cover;
+}

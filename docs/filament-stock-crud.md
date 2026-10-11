@@ -112,3 +112,4 @@ curl -X DELETE http://localhost:5100/api/stock/1
 - Commands, queries, validators, and mapper: `SpooLLedger.Application/FilamentStock`
 - Repository implementation: `SpooLLedger.Infrastructure/Repositories/FilamentStockRepository.cs`
 - Handler and validator tests: `SpooLLedger.Tests`
+- Angular page that lists stock: [filament-stock-page.md](filament-stock-page.md)

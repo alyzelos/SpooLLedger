@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
@@ -11,7 +12,7 @@ const primaryColorKey = 'spoolledger-primary';
 @Component({
   selector: 'app-toolbar',
   standalone: true,
-  imports: [AvatarModule, ButtonModule, PopoverModule, ToolbarModule],
+  imports: [AvatarModule, ButtonModule, PopoverModule, RouterLink, ToolbarModule],
   templateUrl: './toolbar.html',
   styleUrl: './toolbar.css',
 })
