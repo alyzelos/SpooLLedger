@@ -22,6 +22,15 @@
     <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\FilamentStock.json" Link="Data\Seed\FilamentStock.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\Customer.json" Link="Data\Seed\Customer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\Order.json" Link="Data\Seed\Order.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\OrderItem.json" Link="Data\Seed\OrderItem.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -33,6 +33,9 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<DataContext>();
         await context.Database.MigrateAsync();
         await DataSeeder.SeedFilamentStock(context);
+        await DataSeeder.SeedCustomers(context);
+        await DataSeeder.SeedOrders(context);
+        await DataSeeder.SeedOrderItems(context);
     }
     catch
     {

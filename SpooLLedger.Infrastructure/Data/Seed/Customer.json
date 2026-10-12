@@ -1,0 +1,47 @@
+[
+  {
+    "id": "c1000000-0000-4000-8000-000000000001",
+    "firstName": "Mira",
+    "lastName": "Kovacs",
+    "email": "mira.kovacs@example.com",
+    "phoneNumber": "+40 721 100 001",
+    "isActive": true,
+    "createdAt": "2026-01-04T09:00:00Z"
+  },
+  {
+    "id": "c1000000-0000-4000-8000-000000000002",
+    "firstName": "Jonas",
+    "lastName": "Keller",
+    "email": "jonas.keller@example.com",
+    "phoneNumber": "+49 151 200 002",
+    "isActive": true,
+    "createdAt": "2026-01-11T09:00:00Z"
+  },
+  {
+    "id": "c1000000-0000-4000-8000-000000000003",
+    "firstName": "Elena",
+    "lastName": "Popa",
+    "email": "elena.popa@example.com",
+    "phoneNumber": "+40 722 300 003",
+    "isActive": true,
+    "createdAt": "2026-02-02T09:00:00Z"
+  },
+  {
+    "id": "c1000000-0000-4000-8000-000000000004",
+    "firstName": "Andrei",
+    "lastName": "Stoica",
+    "email": "andrei.stoica@example.com",
+    "phoneNumber": "+40 723 400 004",
+    "isActive": false,
+    "createdAt": "2026-02-18T09:00:00Z"
+  },
+  {
+    "id": "c1000000-0000-4000-8000-000000000005",
+    "firstName": "Lina",
+    "lastName": "Berg",
+    "email": "lina.berg@example.com",
+    "phoneNumber": "+46 70 500 005",
+    "isActive": true,
+    "createdAt": "2026-03-01T09:00:00Z"
+  }
+]
