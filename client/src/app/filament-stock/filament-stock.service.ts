@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface FilamentStock {
   id: number;
@@ -13,9 +14,9 @@ export interface FilamentStock {
 @Injectable({ providedIn: 'root' })
 export class FilamentStockService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'https://localhost:5101/api/stock';
+  baseUrl = environment.apiUrl;
 
   getAll(): Observable<FilamentStock[]> {
-    return this.http.get<FilamentStock[]>(this.baseUrl);
+    return this.http.get<FilamentStock[]>(this.baseUrl + 'stock');
   }
 }
