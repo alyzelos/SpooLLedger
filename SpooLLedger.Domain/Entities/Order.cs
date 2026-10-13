@@ -5,6 +5,8 @@ namespace SpooLLedger.Domain.Entities;
 public class Order
 {
     public Guid Id { get; init; } = Guid.NewGuid();
+    
+    public int OrderNumber { get; set; }
     public DateTime OrderDate { get; init; } = DateTime.UtcNow;
     public string Status { get; set; } = "Pending";
 
