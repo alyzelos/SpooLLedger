@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\Order\Queries\" />
+    <Folder Include="CQRS\Order\Commands\" />
+    <Folder Include="CQRS\Order\Commands\CreateOrder\" />
     <Folder Include="MappingProfiles\" />
   </ItemGroup>
 

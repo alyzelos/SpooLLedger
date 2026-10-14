@@ -8,6 +8,10 @@ public class UpdateFilamentStockValidator : AbstractValidator<UpdateFilamentStoc
     public UpdateFilamentStockValidator()
     {
         RuleFor(x => x.Id).GreaterThan(0);
-        FilamentStockRules.ApplyStockRules(RuleFor(x => x.Producer), RuleFor(x => x.Type), RuleFor(x => x.Color), RuleFor(x => x.Quantity));
+        FilamentStockRules.ApplyStockRules(
+            RuleFor(x => x.Producer), 
+            RuleFor(x => x.Type), 
+            RuleFor(x => x.Color), 
+            RuleFor(x => x.Quantity));
     }
 }

@@ -11,7 +11,8 @@ public class Order
     public string Status { get; set; } = "Pending";
 
     // LINK TO CUSTOMER: Every order belongs to a specific Customer
-    public Guid CustomerId { get; set; } 
+    public Guid CustomerId { get; set; }
+    public Customer Customer { get; set; } = null!; 
 
     // LINK TO ITEMS: An order contains multiple components/items
     public List<OrderItem> Items { get; set; } = new();

@@ -13,7 +13,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.Status).IsRequired().HasMaxLength(30);
         builder.Ignore(o => o.TotalAmount);
 
-        builder.HasOne<Customer>()
+        builder.HasOne(o => o.Customer)
             .WithMany()
             .HasForeignKey(o => o.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
