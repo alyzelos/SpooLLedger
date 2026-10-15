@@ -1,6 +1,6 @@
 [
   {
-    "id": "c1000000-0000-4000-8000-000000000001",
+    "id": 1,
     "firstName": "Mira",
     "lastName": "Kovacs",
     "email": "mira.kovacs@example.com",
@@ -9,7 +9,7 @@
     "createdAt": "2026-01-04T09:00:00Z"
   },
   {
-    "id": "c1000000-0000-4000-8000-000000000002",
+    "id": 2,
     "firstName": "Jonas",
     "lastName": "Keller",
     "email": "jonas.keller@example.com",
@@ -18,7 +18,7 @@
     "createdAt": "2026-01-11T09:00:00Z"
   },
   {
-    "id": "c1000000-0000-4000-8000-000000000003",
+    "id": 3,
     "firstName": "Elena",
     "lastName": "Popa",
     "email": "elena.popa@example.com",
@@ -27,7 +27,7 @@
     "createdAt": "2026-02-02T09:00:00Z"
   },
   {
-    "id": "c1000000-0000-4000-8000-000000000004",
+    "id": 4,
     "firstName": "Andrei",
     "lastName": "Stoica",
     "email": "andrei.stoica@example.com",
@@ -36,7 +36,7 @@
     "createdAt": "2026-02-18T09:00:00Z"
   },
   {
-    "id": "c1000000-0000-4000-8000-000000000005",
+    "id": 5,
     "firstName": "Lina",
     "lastName": "Berg",
     "email": "lina.berg@example.com",

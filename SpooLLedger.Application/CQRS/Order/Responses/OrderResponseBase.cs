@@ -8,4 +8,5 @@ public abstract class OrderResponseBase
     public DateTime OrderDate { get; set; }
     public string? Status { get; set; }
     public string CustomerName { get; set; } = string.Empty;
+    public List<OrderLineResponse> Items { get; set; } = [];
 }

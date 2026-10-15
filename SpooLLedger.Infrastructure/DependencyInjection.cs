@@ -9,7 +9,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddScoped<IFilamentStockRepository, FilamentStockRepository>();
-        services.AddScoped<IOrderRspository, OrderRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
         return services;
     }
 }

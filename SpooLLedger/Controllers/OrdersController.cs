@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SpooLLedger.Application.CQRS.Order.Commands.CreateOrder;
+using SpooLLedger.Application.CQRS.Order.Commands.UpdateOrder;
 using SpooLLedger.Application.CQRS.Order.Queries;
 using SpooLLedger.Application.CQRS.Order.Responses;
 
@@ -26,6 +27,12 @@ public class OrdersController(ISender mediator) : ControllerBase
 
     [HttpPost("create-order")]
     public async Task<ActionResult<CreateOrderResponse>> CreateOrder([FromBody]CreateOrderCommand command, CancellationToken cancellationToken)
+    {
+        return await mediator.Send(command, cancellationToken);
+    }
+
+    [HttpPut("update")]
+    public async Task<ActionResult<UpdateOrderResponse>> UpdateOrder([FromBody] UpdateOrderCommand command, CancellationToken cancellationToken)
     {
         return await mediator.Send(command, cancellationToken);
     }

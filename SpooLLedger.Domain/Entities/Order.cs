@@ -7,11 +7,11 @@ public class Order
     public Guid Id { get; init; } = Guid.NewGuid();
     
     public int OrderNumber { get; set; }
-    public DateTime OrderDate { get; init; } = DateTime.UtcNow;
+    public DateTime OrderDate { get;  set; }
     public string Status { get; set; } = "Pending";
 
     // LINK TO CUSTOMER: Every order belongs to a specific Customer
-    public Guid CustomerId { get; set; }
+    public int CustomerId { get; set; }
     public Customer Customer { get; set; } = null!; 
 
     // LINK TO ITEMS: An order contains multiple components/items

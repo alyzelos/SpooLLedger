@@ -1,42 +1,32 @@
 [
   {
-    "id": "b3000000-0000-4000-8000-000000000001",
+    "id": 1,
     "orderId": "a2000000-0000-4000-8000-000000000001",
-    "productName": "Trophy",
-    "weight": 1000,
-    "pricePerUnit": 24.50,
+    "itemId": 1,
     "quantity": 2
   },
   {
-    "id": "b3000000-0000-4000-8000-000000000002",
+    "id": 2,
     "orderId": "a2000000-0000-4000-8000-000000000002",
-    "productName": "Statue",
-    "weight": 750,
-    "pricePerUnit": 27.00,
+    "itemId": 2,
     "quantity": 1
   },
   {
-    "id": "b3000000-0000-4000-8000-000000000003",
+    "id": 3,
     "orderId": "a2000000-0000-4000-8000-000000000003",
-    "productName": "Toy",
-    "weight": 1000,
-    "pricePerUnit": 23.00,
+    "itemId": 3,
     "quantity": 3
   },
   {
-    "id": "b3000000-0000-4000-8000-000000000004",
+    "id": 4,
     "orderId": "a2000000-0000-4000-8000-000000000004",
-    "productName": "Car",
-    "weight": 850,
-    "pricePerUnit": 26.75,
+    "itemId": 4,
     "quantity": 2
   },
   {
-    "id": "b3000000-0000-4000-8000-000000000005",
+    "id": 5,
     "orderId": "a2000000-0000-4000-8000-000000000005",
-    "productName": "Keychain",
-    "weight": 500,
-    "pricePerUnit": 22.00,
+    "itemId": 5,
     "quantity": 4
   }
 ]

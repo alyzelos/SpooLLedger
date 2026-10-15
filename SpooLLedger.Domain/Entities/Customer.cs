@@ -4,7 +4,7 @@ namespace SpooLLedger.Domain.Entities;
 
 public class Customer
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public int Id { get; set; }
 
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

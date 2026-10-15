@@ -7,7 +7,7 @@ using SpooLLedger.Application.CQRS.Order.Responses;
 namespace SpooLLedger.Application.CQRS.Order.Queries;
 
 public class GetOrderByOrderNumberHandler(
-    IOrderRspository orderRspository,
+    IOrderRepository orderRspository,
     IMapper mapper) : IRequestHandler<GetOrderByOrderNumberQuery, OrderQueryResponse>
 {
     public async Task<OrderQueryResponse> Handle(GetOrderByOrderNumberQuery query, CancellationToken cancellationToken)

@@ -47,6 +47,17 @@ public class DataSeeder
         await dataContext.SaveChangesAsync();
     }
 
+    public static async Task SeedItems(DataContext dataContext)
+    {
+        if (await dataContext.Items.AnyAsync()) return;
+
+        var items = await ReadSeed<Item>("Item.json");
+        if (items.Count == 0) return;
+
+        dataContext.Items.AddRange(items);
+        await dataContext.SaveChangesAsync();
+    }
+
     public static async Task SeedOrderItems(DataContext dataContext)
     {
         if (await dataContext.OrderItems.AnyAsync()) return;

@@ -1,19 +1,13 @@
-using System;
-
 namespace SpooLLedger.Domain.Entities;
 
 public class OrderItem
 {
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public int Id { get; set; }
     public Guid OrderId { get; set; }
-
-    // Core item information
-    public string ProductName { get; set; } = string.Empty;
-    public int Weight { get; set; }
-    public decimal PricePerUnit { get; set; }
+    public int ItemId { get; set; }
+    public Item Item { get; set; } = null!;
     public int Quantity { get; set; }
 
-    // Computed property for the total cost of this specific item line
-    public decimal TotalWeight => Weight * Quantity;
-    public decimal TotalPrice => PricePerUnit * Quantity;
+    public decimal TotalWeight => Item is null ? 0 : Item.Weight * Quantity;
+    public decimal TotalPrice => Item is null ? 0 : Item.PricePerUnit * Quantity;
 }

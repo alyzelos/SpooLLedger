@@ -7,7 +7,7 @@ using SpooLLedger.Application.CQRS.Order.Responses;
 namespace SpooLLedger.Application.CQRS.Order.Commands.CreateOrder;
 
 public class CreateOrderHandler(
-    IOrderRspository orderRepository,
+    IOrderRepository orderRepository,
     IMapper mapper) 
     : IRequestHandler<CreateOrderCommand, CreateOrderResponse>
 {

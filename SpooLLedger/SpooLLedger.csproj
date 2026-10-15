@@ -26,6 +26,9 @@
     <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\Customer.json" Link="Data\Seed\Customer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\Item.json" Link="Data\Seed\Item.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\Order.json" Link="Data\Seed\Order.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
