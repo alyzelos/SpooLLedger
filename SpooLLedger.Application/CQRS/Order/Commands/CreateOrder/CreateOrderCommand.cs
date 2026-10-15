@@ -9,11 +9,5 @@ public class CreateOrderCommand : IRequest<CreateOrderResponse>
 {
     public DateTime OrderDate { get; init; } = DateTime.UtcNow;
     public string Status { get; set; } = "Pending";
-
-    
     public Guid CustomerId { get; set; }
-    // public Customer Customer { get; set; } = null!; 
-
-   
-    // public List<OrderItem> Items { get; set; } = new();
 }
