@@ -1,32 +1,32 @@
 [
   {
     "id": 1,
-    "productName": "trophy",
-    "weight": 1000,
+    "productName": "trophy stand",
+    "weight": 40,
     "pricePerUnit": 24.50
   },
   {
     "id": 2,
     "productName": "statue",
-    "weight": 750,
+    "weight": 35,
     "pricePerUnit": 27.00
   },
   {
     "id": 3,
     "productName": "toy",
-    "weight": 1000,
+    "weight": 200,
     "pricePerUnit": 23.00
   },
   {
     "id": 4,
     "productName": "car",
-    "weight": 850,
+    "weight": 10,
     "pricePerUnit": 26.75
   },
   {
     "id": 5,
     "productName": "keychain",
-    "weight": 500,
+    "weight": 6,
     "pricePerUnit": 22.00
   }
 ]
