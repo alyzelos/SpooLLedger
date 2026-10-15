@@ -9,6 +9,7 @@ An order belongs to one customer and has many order lines. Each line stores a qu
 - `GET api/orders` returns every order with customer name and lines.
 - `GET api/orders/{orderNumber}` returns one order.
 - `POST api/orders/create-order` creates an order. Body: `orderDate`, `status` (`Pending`), `customerId`, and `items` (`itemId`, `quantity`).
+- `POST api/orders/create-order-soap` creates an order from a SOAP 1.1 envelope. `CreateOrderSoapHandler` maps that command onto `CreateOrderCommand` and uses the same repository. The response is a SOAP envelope.
 - `PUT api/orders/update` replaces order fields and the full line list. Body adds `orderNumber`.
 
 `OrdersController` sends MediatR requests. Handlers call `IOrderRepository`. The repository assigns the next `OrderNumber` and loads `Customer` and `Items.Item` before mapping to `OrderLineResponse`.

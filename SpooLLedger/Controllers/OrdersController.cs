@@ -1,9 +1,11 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SpooLLedger.Application.CQRS.Order.Commands.CreateOrder;
 using SpooLLedger.Application.CQRS.Order.Commands.UpdateOrder;
 using SpooLLedger.Application.CQRS.Order.Queries;
 using SpooLLedger.Application.CQRS.Order.Responses;
+using SpooLLedger.Soap;
 
 namespace SpooLLedger.Controllers;
 
@@ -31,9 +33,33 @@ public class OrdersController(ISender mediator) : ControllerBase
         return await mediator.Send(command, cancellationToken);
     }
 
+    [HttpPost("create-order-soap")]
+    public async Task<ContentResult> CreateOrderSoap(CancellationToken cancellationToken)
+    {
+        var xml = await new StreamReader(Request.Body).ReadToEndAsync(cancellationToken);
+        try
+        {
+            var command = CreateOrderSoapXml.Read(xml);
+            var response = await mediator.Send(command, cancellationToken);
+            return Xml(CreateOrderSoapXml.Write(response), StatusCodes.Status200OK);
+        }
+        catch (ValidationException exception)
+        {
+            var message = string.Join("; ", exception.Errors.Select(error => error.ErrorMessage));
+            return Xml(CreateOrderSoapXml.WriteFault(message), StatusCodes.Status400BadRequest);
+        }
+        catch (Exception exception)
+        {
+            return Xml(CreateOrderSoapXml.WriteFault(exception.Message), StatusCodes.Status400BadRequest);
+        }
+    }
+
     [HttpPut("update")]
     public async Task<ActionResult<UpdateOrderResponse>> UpdateOrder([FromBody] UpdateOrderCommand command, CancellationToken cancellationToken)
     {
         return await mediator.Send(command, cancellationToken);
     }
+
+    private static ContentResult Xml(string content, int statusCode) =>
+        new() { Content = content, ContentType = "text/xml", StatusCode = statusCode };
 }
