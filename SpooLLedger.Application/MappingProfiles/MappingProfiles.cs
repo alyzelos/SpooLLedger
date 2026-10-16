@@ -1,5 +1,6 @@
 using AutoMapper;
 using SpooLLedger.Application.CQRS.Customer.Responses;
+using SpooLLedger.Application.CQRS.Items.Responses;
 using SpooLLedger.Application.CQRS.Order.Commands.CreateOrder;
 using SpooLLedger.Application.CQRS.Order.Commands.CreateOrderSoap;
 using SpooLLedger.Application.CQRS.Order.Responses;
@@ -28,6 +29,8 @@ public class MappingProfiles : Profile
         
         //Customer mappers
         CreateMap<Customer, CustomerQueryResponse>();
+        CreateMap<Item, GetItemResponse>();
+        CreateMap<Item, CreateItemResponse>();
             
             
     }

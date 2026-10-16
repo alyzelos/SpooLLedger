@@ -12,7 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CQRS\Customer\Commands\" />
+    <Folder Include="CQRS\Customer\Commands\Create\" />
     <Folder Include="CQRS\Customer\Responses\" />
+    <Folder Include="CQRS\Items\" />
     <Folder Include="CQRS\Order\Commands\" />
     <Folder Include="CQRS\Order\Commands\CreateOrder\" />
     <Folder Include="CQRS\Order\Commands\UpdateOrder\" />
