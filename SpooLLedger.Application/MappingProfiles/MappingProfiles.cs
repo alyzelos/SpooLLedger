@@ -26,7 +26,8 @@ public class MappingProfiles : Profile
         CreateMap<CreateOrderSoapCommand, CreateOrderCommand>();
         CreateMap<Order, CreateOrderSoapResponse>()
             .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.FullName));
-        
+        CreateMap<Order, CustomOrderCommandResponse>()
+            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.FullName));
         //Customer mappers
         CreateMap<Customer, CustomerQueryResponse>();
         CreateMap<Item, GetItemResponse>();

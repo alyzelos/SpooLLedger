@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SpooLLedger.Application.CQRS.Order.Commands.CreateOrder;
+using SpooLLedger.Application.CQRS.Order.Commands.CustomCommand;
 using SpooLLedger.Application.CQRS.Order.Commands.UpdateOrder;
 using SpooLLedger.Application.CQRS.Order.Queries;
 using SpooLLedger.Application.CQRS.Order.Responses;
@@ -20,10 +21,17 @@ public class OrdersController(ISender mediator) : ControllerBase
         return Ok(orders);
     }
 
+    // [HttpGet("{orderNumber:int}")]
+    // public async Task<ActionResult<OrderQueryResponse>> GetOrderByOrderNumber(int orderNumber, CancellationToken cancellationToken)
+    // {
+    //     var query = new GetOrderByOrderNumberQuery(orderNumber);
+    //     return await mediator.Send(query, cancellationToken);
+    // }
+
     [HttpGet("{orderNumber:int}")]
-    public async Task<ActionResult<OrderQueryResponse>> GetOrderByOrderNumber(int orderNumber, CancellationToken cancellationToken)
+    public async Task<ActionResult<CustomOrderCommandResponse>> GetOrderByOrderNumber(int orderNumber, CancellationToken cancellationToken)
     {
-        var query = new GetOrderByOrderNumberQuery(orderNumber);
+        var query = new CustomOrderCommandQuery(orderNumber);
         return await mediator.Send(query, cancellationToken);
     }
 

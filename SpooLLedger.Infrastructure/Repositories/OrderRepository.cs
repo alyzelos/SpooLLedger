@@ -1,14 +1,18 @@
+using System.Security.Cryptography.X509Certificates;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using SpooLLedger.Application.Abstractions;
 using SpooLLedger.Application.CQRS.Order;
 using SpooLLedger.Application.CQRS.Order.Commands.CreateOrder;
 using SpooLLedger.Application.CQRS.Order.Commands.UpdateOrder;
+using SpooLLedger.Application.CQRS.Order.Responses;
 using SpooLLedger.Domain.Entities;
 using SpooLLedger.Infrastructure.Data.DatabaseContext;
 
 namespace SpooLLedger.Infrastructure.Repositories;
 
-public class OrderRepository(DataContext dataContext) : IOrderRepository
+public class OrderRepository(DataContext dataContext, IMapper mapper) : IOrderRepository
 {
     public async Task<IReadOnlyList<Order>> GetAllAsync(CancellationToken cancellationToken) => 
         await dataContext.Orders
@@ -32,6 +36,26 @@ public class OrderRepository(DataContext dataContext) : IOrderRepository
         }
         return order;
     }
+
+    public async Task<CustomOrderCommandResponse> GetCustomOrder(int orderNumber, CancellationToken cancellationToken)
+    {
+        return await dataContext.Orders
+            .AsNoTracking()
+            .Include(c => c.Customer)
+            .ProjectTo<CustomOrderCommandResponse>(mapper.ConfigurationProvider)
+            // .Select(o => new CustomOrderCommandResponse
+            // {
+            //     OrderNumber = o.OrderNumber,
+            //     Status = o.Status,
+            //     CustomerName = new CustorOrderCustomerResponse
+            //     {
+            //         CustomerName = o.Customer.FullName   
+            //     }
+            // })
+            .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber) ?? throw new Exception("not found");
+    }
+
+
     public async Task<Order> CreateOrder(CreateOrderCommand command, CancellationToken cancellationToken)
     {
         await using var transaction = await dataContext.Database.BeginTransactionAsync(cancellationToken);
