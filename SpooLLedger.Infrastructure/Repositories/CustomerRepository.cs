@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using SpooLLedger.Application.Abstractions;
-using SpooLLedger.Application.CQRS.Customer.Queries;
 using SpooLLedger.Domain.Entities;
 using SpooLLedger.Infrastructure.Data.DatabaseContext;
 

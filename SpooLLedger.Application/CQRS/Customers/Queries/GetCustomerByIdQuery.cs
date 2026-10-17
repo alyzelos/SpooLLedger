@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel.Design;
 using MediatR;
-using SpooLLedger.Application.CQRS.Customer.Responses;
+using SpooLLedger.Application.CQRS.Customers.Responses;
 
-namespace SpooLLedger.Application.CQRS.Customer.Queries;
+namespace SpooLLedger.Application.CQRS.Customers.Queries;
 
 public class GetCustomerByIdQuery : IRequest<CustomerQueryResponse>
 {

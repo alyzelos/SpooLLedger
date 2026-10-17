@@ -2,9 +2,9 @@ using System;
 using AutoMapper;
 using MediatR;
 using SpooLLedger.Application.Abstractions;
-using SpooLLedger.Application.CQRS.Customer.Responses;
+using SpooLLedger.Application.CQRS.Customers.Responses;
 
-namespace SpooLLedger.Application.CQRS.Customer.Queries;
+namespace SpooLLedger.Application.CQRS.Customers.Queries;
 
 public class GetCustomerByIdHandler(ICustomerRepository customerRepository, IMapper mapper) : IRequestHandler<GetCustomerByIdQuery, CustomerQueryResponse>
 {

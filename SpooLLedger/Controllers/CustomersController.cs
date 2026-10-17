@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SpooLLedger.Application.CQRS.Customer.Queries;
-using SpooLLedger.Application.CQRS.Customer.Responses;
+using SpooLLedger.Application.CQRS.Customers.Queries;
+using SpooLLedger.Application.CQRS.Customers.Responses;
 
 namespace SpooLLedger.Controllers;
 

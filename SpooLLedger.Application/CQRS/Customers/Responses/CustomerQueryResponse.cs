@@ -1,7 +1,7 @@
 using System;
 using MediatR;
 
-namespace SpooLLedger.Application.CQRS.Customer.Responses;
+namespace SpooLLedger.Application.CQRS.Customers.Responses;
 
 public class CustomerQueryResponse 
 {
