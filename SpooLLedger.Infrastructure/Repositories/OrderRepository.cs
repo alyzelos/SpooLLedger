@@ -42,16 +42,16 @@ public class OrderRepository(DataContext dataContext, IMapper mapper) : IOrderRe
         return await dataContext.Orders
             .AsNoTracking()
             .Include(c => c.Customer)
-            // .ProjectTo<CustomOrderCommandResponse>(mapper.ConfigurationProvider)
-            .Select(o => new CustomOrderCommandResponse
-            {
-                OrderNumber = o.OrderNumber,
-                Status = o.Status,
-                CustomerName = new CustorOrderCustomerResponse
-                {
-                    CustomerName = o.Customer.FullName   
-                }
-            })
+            .ProjectTo<CustomOrderCommandResponse>(mapper.ConfigurationProvider)
+            // .Select(o => new CustomOrderCommandResponse
+            // {
+            //     OrderNumber = o.OrderNumber,
+            //     Status = o.Status,
+            //     CustomerName = new CustorOrderCustomerResponse
+            //     {
+            //         CustomerName = o.Customer.FullName   
+            //     }
+            // })
             .FirstOrDefaultAsync(o => o.OrderNumber == orderNumber) ?? throw new Exception("not found");
     }
 
