@@ -2,20 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SpooLLedger.Infrastructure.Data.DatabaseContext;
 
 #nullable disable
 
-namespace SpooLLedger.Infrastructure.Data.Migrations
+namespace SpooLLedger.Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20261027211112_OrderLineCompletedAndPaymentStatus")]
-    partial class OrderLineCompletedAndPaymentStatus
+    partial class DataContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.11");
@@ -55,6 +52,25 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("SpooLLedger.Domain.Entities.FilamentColor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("FilamentColors");
                 });
 
             modelBuilder.Entity("SpooLLedger.Domain.Entities.FilamentType", b =>
@@ -121,10 +137,18 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     b.Property<int>("OrderNumber")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("PricingName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("StockAdjusted")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -142,8 +166,18 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CompletedQuantity")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("FilamentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");

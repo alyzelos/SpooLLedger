@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SpooLLedger.Infrastructure.Data.Migrations
+namespace SpooLLedger.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration
@@ -27,6 +27,19 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FilamentColors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FilamentColors", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,7 +79,9 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     ProductName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     Weight = table.Column<int>(type: "INTEGER", nullable: false),
-                    PricePerUnit = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: false)
+                    PrintDurationMinutes = table.Column<int>(type: "INTEGER", nullable: false),
+                    Details = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
+                    PricePerUnit = table.Column<decimal>(type: "TEXT", precision: 18, scale: 2, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -97,6 +112,8 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     OrderNumber = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Status = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
+                    PricingName = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    StockAdjusted = table.Column<bool>(type: "INTEGER", nullable: false),
                     CustomerId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -118,7 +135,10 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     OrderId = table.Column<Guid>(type: "TEXT", nullable: false),
                     ItemId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Quantity = table.Column<int>(type: "INTEGER", nullable: false)
+                    FilamentType = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Color = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    CompletedQuantity = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,6 +156,12 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FilamentColors_Name",
+                table: "FilamentColors",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilamentTypes_Name",
@@ -174,6 +200,9 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "FilamentColors");
+
             migrationBuilder.DropTable(
                 name: "FilamentStocks");
 
