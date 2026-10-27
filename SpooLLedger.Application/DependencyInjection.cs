@@ -3,6 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SpooLLedger.Application.Behaviors;
+using SpooLLedger.Application.Pricings;
 
 namespace SpooLLedger.Application;
 
@@ -15,6 +16,7 @@ public static class DependencyInjection
         services.AddValidatorsFromAssembly(assembly);
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        services.AddSingleton<IItemPriceCalculator, ItemPriceCalculator>();
         return services;
     }
 }

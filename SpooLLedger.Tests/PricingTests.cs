@@ -1,5 +1,6 @@
 using Moq;
 using SpooLLedger.Application.Abstractions;
+using SpooLLedger.Application.Pricings;
 using SpooLLedger.Application.Pricings.Commands;
 using SpooLLedger.Application.Pricings.Queries.GetPricings;
 using SpooLLedger.Domain.Entities;
@@ -108,6 +109,44 @@ public class PricingTests
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(CreatePricingCommand.ElectricityCostPerKwh));
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(CreatePricingCommand.FilamentSpoolPrice));
         Assert.Contains(result.Errors, e => e.PropertyName == nameof(CreatePricingCommand.PrinterMaintenanceCostPerHour));
+    }
+
+    [Fact]
+    public void Calculate_Uses120WattsForTheFirstTenMinutesAnd80After()
+    {
+        // Arrange
+        var item = new Item { Weight = 1000, PrintDurationMinutes = 70 };
+        var pricing = new Pricing
+        {
+            ElectricityCostPerKwh = 1.5m,
+            FilamentSpoolPrice = 30m,
+            PrinterMaintenanceCostPerHour = 0.5m
+        };
+
+        // Act
+        var result = new ItemPriceCalculator().Calculate(item, pricing);
+
+        // Assert
+        // 10 min at 120 W is 0.02 kWh, 60 min at 80 W is 0.08 kWh.
+        Assert.Equal(0.10m, result.EnergyKwh);
+        Assert.Equal(0.15m, result.Electricity);
+        Assert.Equal(30m, result.Filament);
+        Assert.Equal(70m / 60m * 0.5m, result.Maintenance);
+    }
+
+    [Fact]
+    public void Calculate_ShortPrintStaysAt120Watts()
+    {
+        // Arrange
+        var item = new Item { Weight = 0, PrintDurationMinutes = 5 };
+        var pricing = new Pricing { ElectricityCostPerKwh = 1m, FilamentSpoolPrice = 0m };
+
+        // Act
+        var result = new ItemPriceCalculator().Calculate(item, pricing);
+
+        // Assert
+        Assert.Equal(5m / 60m * 120m / 1000m, result.EnergyKwh);
+        Assert.Equal(0m, result.Maintenance);
     }
 
     [Fact]

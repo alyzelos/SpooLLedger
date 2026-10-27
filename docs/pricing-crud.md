@@ -37,6 +37,10 @@ Pricing holds the cost inputs used to price a print. It follows the same flow as
 
 The name is required, at most 100 characters, and must not belong to another row. The three costs must be zero or greater. An update also requires an id greater than zero.
 
+## Price calculation
+
+`ItemPriceCalculator` in `SpooLLedger.Application/Pricings` turns an item and a pricing row into a breakdown. It does no database work. Filament is `weight × filamentCostPerGram`. Maintenance is the print time in hours times `printerMaintenanceCostPerHour`. Electricity uses a fixed printer draw: 120 W for the first 10 minutes, then 80 W. Energy in kWh is that power times the hours, and the cost is the energy times `electricityCostPerKwh`. `CalculateItemPriceHandler` calls it and stores the rounded total on the item.
+
 ## Angular page
 
 `/pricing` shows `PricingPage`: a PrimeNG card with an Add button and a table. Each row has edit (pencil) and delete (bin) buttons. Add and edit share one dialog, which shows the price per gram while the spool price is typed. Delete asks for confirmation.

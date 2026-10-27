@@ -34,4 +34,8 @@ export class ItemsService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(this.baseUrl + 'items/' + id);
   }
+
+  calculatePrice(id: number, pricingName: string): Observable<unknown> {
+    return this.http.post(this.baseUrl + 'items/' + id + '/price', { pricingName });
+  }
 }

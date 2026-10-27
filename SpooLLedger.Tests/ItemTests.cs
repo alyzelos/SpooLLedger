@@ -1,6 +1,7 @@
 using Moq;
 using SpooLLedger.Application.Abstractions;
 using SpooLLedger.Application.CQRS.Items.Commands;
+using SpooLLedger.Application.Pricings;
 using SpooLLedger.Domain.Entities;
 
 namespace SpooLLedger.Tests;
@@ -79,6 +80,33 @@ public class ItemTests
 
         // Assert
         Assert.Equal(DeleteItemResult.NotFound, result);
+    }
+
+    [Fact]
+    public async Task CalculatePrice_SavesRoundedTotal()
+    {
+        // Arrange
+        var item = new Item { Id = 4, Weight = 1000, PrintDurationMinutes = 70 };
+        var pricing = new Pricing
+        {
+            Name = "Standard",
+            ElectricityCostPerKwh = 1.5m,
+            FilamentSpoolPrice = 30m,
+            PrinterMaintenanceCostPerHour = 0.5m
+        };
+        _repository.Setup(r => r.GetByIdAsync(4, It.IsAny<CancellationToken>())).ReturnsAsync(item);
+        var pricings = new Mock<IPricingRepository>();
+        pricings.Setup(r => r.GetByNameAsync("Standard", It.IsAny<CancellationToken>())).ReturnsAsync(pricing);
+
+        var handler = new CalculateItemPriceHandler(_repository.Object, pricings.Object, new ItemPriceCalculator());
+
+        // Act
+        var result = await handler.Handle(new CalculateItemPriceCommand(4, "Standard"), CancellationToken.None);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(decimal.Round(result.Total, 2), item.PricePerUnit);
+        _repository.Verify(r => r.UpdateAsync(item, It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]

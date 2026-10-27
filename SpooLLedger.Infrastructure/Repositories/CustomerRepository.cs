@@ -22,4 +22,28 @@ public class CustomerRepository(DataContext dataContext) : ICustomerRepository
         }
         return order;
     }
+
+    public Task<Customer?> FindAsync(int id, CancellationToken cancellationToken) =>
+        dataContext.Customers.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+
+    public Task<bool> IsUsedInOrdersAsync(int id, CancellationToken cancellationToken) =>
+        dataContext.Orders.AnyAsync(o => o.CustomerId == id, cancellationToken);
+
+    public async Task AddAsync(Customer customer, CancellationToken cancellationToken)
+    {
+        dataContext.Customers.Add(customer);
+        await dataContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateAsync(Customer customer, CancellationToken cancellationToken)
+    {
+        dataContext.Customers.Update(customer);
+        await dataContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(Customer customer, CancellationToken cancellationToken)
+    {
+        dataContext.Customers.Remove(customer);
+        await dataContext.SaveChangesAsync(cancellationToken);
+    }
 }

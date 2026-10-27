@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SpooLLedger.Application.CQRS.Items.Commands;
 using SpooLLedger.Application.CQRS.Items.Dtos;
 using SpooLLedger.Application.CQRS.Items.Queries.GetItemById;
+using SpooLLedger.Application.Pricings;
 using SpooLLedger.Application.CQRS.Items.Queries.GetItems;
 
 namespace SpooLLedger.Controllers;
@@ -46,6 +47,16 @@ public class ItemsController(IMediator mediator) : ControllerBase
         return updated is null ? NotFound() : Ok(updated);
     }
 
+    [HttpPost("{id:int}/price")]
+    public async Task<ActionResult<ItemPriceBreakdown>> CalculatePrice(
+        int id,
+        CalculateItemPriceRequest request,
+        CancellationToken cancellationToken)
+    {
+        var breakdown = await mediator.Send(new CalculateItemPriceCommand(id, request.PricingName), cancellationToken);
+        return breakdown is null ? NotFound() : Ok(breakdown);
+    }
+
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteItem(int id, CancellationToken cancellationToken)
     {
@@ -63,3 +74,5 @@ public class ItemsController(IMediator mediator) : ControllerBase
 }
 
 public record UpdateItemRequest(string ProductName, int Weight, int PrintDurationMinutes, string? Details);
+
+public record CalculateItemPriceRequest(string PricingName);

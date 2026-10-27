@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -9,10 +9,14 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
+import { CustomersCard } from '../customers/customers';
+import { FilamentTypesCard } from '../filament-types/filament-types';
 import { Item, ItemInput, ItemsService } from './items.service';
+import { Pricing, PricingService } from '../pricing/pricing.service';
 
 @Component({
   selector: 'app-items',
@@ -20,11 +24,15 @@ import { Item, ItemInput, ItemsService } from './items.service';
     ButtonModule,
     CardModule,
     ConfirmDialogModule,
+    CustomersCard,
+    FilamentTypesCard,
     CurrencyPipe,
     DialogModule,
+    FormsModule,
     InputNumberModule,
     InputTextModule,
     ReactiveFormsModule,
+    SelectModule,
     TableModule,
     TextareaModule,
     TooltipModule,
@@ -35,6 +43,7 @@ import { Item, ItemInput, ItemsService } from './items.service';
 })
 export class ItemsPage implements OnInit {
   private readonly itemsService = inject(ItemsService);
+  private readonly pricingService = inject(PricingService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly fb = inject(FormBuilder);
 
@@ -44,6 +53,11 @@ export class ItemsPage implements OnInit {
   protected readonly editingId = signal<number | null>(null);
   protected readonly saving = signal(false);
   protected readonly saveError = signal<string | null>(null);
+  protected readonly priceItem = signal<Item | null>(null);
+  protected readonly pricings = signal<Pricing[]>([]);
+  protected readonly pricingName = signal<string | null>(null);
+  protected readonly calculating = signal(false);
+  protected readonly priceError = signal<string | null>(null);
 
   protected readonly form = this.fb.nonNullable.group({
     productName: ['', [Validators.required, Validators.maxLength(100)]],
@@ -90,7 +104,41 @@ export class ItemsPage implements OnInit {
     this.openDialog();
   }
 
-  protected calculatePrice(item: Item): void {}
+  protected calculatePrice(item: Item): void {
+    this.priceItem.set(item);
+    this.pricingName.set(this.pricings()[0]?.name ?? null);
+    this.priceError.set(null);
+    if (this.pricings().length === 0) {
+      this.pricingService.getAll().subscribe({
+        next: (response) => {
+          this.pricings.set(response);
+          this.pricingName.set(response[0]?.name ?? null);
+        },
+        error: () => this.priceError.set('Could not load pricing.'),
+      });
+    }
+  }
+
+  protected confirmPrice(): void {
+    const item = this.priceItem();
+    const pricingName = this.pricingName();
+    if (item === null || pricingName === null) {
+      return;
+    }
+
+    this.calculating.set(true);
+    this.itemsService.calculatePrice(item.id, pricingName).subscribe({
+      next: () => {
+        this.calculating.set(false);
+        this.priceItem.set(null);
+        this.load();
+      },
+      error: (response: HttpErrorResponse) => {
+        this.calculating.set(false);
+        this.priceError.set(response.status === 400 ? 'Choose a pricing.' : 'Could not calculate the price.');
+      },
+    });
+  }
 
   protected save(): void {
     this.form.markAllAsTouched();

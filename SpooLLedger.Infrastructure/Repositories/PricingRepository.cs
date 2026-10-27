@@ -13,6 +13,9 @@ public class PricingRepository(DataContext context) : IPricingRepository
     public Task<Pricing?> GetByIdAsync(int id, CancellationToken cancellationToken) =>
         context.Pricings.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
 
+    public Task<Pricing?> GetByNameAsync(string name, CancellationToken cancellationToken) =>
+        context.Pricings.FirstOrDefaultAsync(p => p.Name == name, cancellationToken);
+
     public Task<bool> NameExistsAsync(string name, int? excludeId, CancellationToken cancellationToken) =>
         context.Pricings.AnyAsync(p => p.Name == name && p.Id != excludeId, cancellationToken);
 

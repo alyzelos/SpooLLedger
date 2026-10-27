@@ -1,0 +1,65 @@
+<p-card header="Filament types">
+  <div class="mb-4">
+    <button pButton type="button" icon="pi pi-plus" label="Add" (click)="add()"></button>
+  </div>
+
+  @if (error()) {
+    <p>{{ error() }}</p>
+  } @else if (types() === null) {
+    <p>Loading filament types...</p>
+  } @else if (types()!.length === 0) {
+    <p>No filament types yet.</p>
+  } @else {
+    <p-table
+      [value]="types()!"
+      dataKey="id"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="pageSizes"
+      [tableStyle]="{ 'min-width': '30rem' }"
+    >
+      <ng-template #header>
+        <tr>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-type>
+        <tr>
+          <td>{{ type.name }}</td>
+          <td class="whitespace-nowrap">
+            <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-pencil" aria-label="Edit" (click)="edit(type)"></button>
+            <button pButton type="button" [text]="true" [rounded]="true" severity="danger" icon="pi pi-trash" aria-label="Delete" (click)="delete(type)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+</p-card>
+
+<p-dialog
+  [header]="editingId() === null ? 'Add filament type' : 'Edit filament type'"
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  [style]="{ width: '24rem' }"
+>
+  <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="typeName">Name</label>
+      <input pInputText id="typeName" formControlName="name" maxlength="100" [invalid]="invalid()" />
+      @if (invalid()) {
+        <small class="text-red-500">Name is required.</small>
+      }
+    </div>
+    @if (saveError()) {
+      <small class="text-red-500">{{ saveError() }}</small>
+    }
+    <div class="flex justify-end gap-2">
+      <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="dialogVisible.set(false)"></button>
+      <button pButton type="submit" label="Save" icon="pi pi-check" [loading]="saving()"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-confirmdialog />

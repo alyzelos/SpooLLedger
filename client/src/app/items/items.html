@@ -1,4 +1,10 @@
 <div class="p-6">
+  <div class="resources-top">
+    <app-customers />
+    <app-filament-types />
+  </div>
+
+  <div class="mt-6">
   <p-card header="Items">
     <div class="mb-4">
       <button pButton type="button" icon="pi pi-plus" label="Add" (click)="add()"></button>
@@ -36,20 +42,18 @@
             </td>
             <td class="details">{{ item.details }}</td>
             <td class="whitespace-nowrap">
-              @if (item.pricePerUnit === null) {
-                <button
-                  pButton
-                  type="button"
-                  [text]="true"
-                  [rounded]="true"
-                  severity="success"
-                  icon="pi pi-calculator"
-                  aria-label="Calculate price"
-                  pTooltip="Calculate price"
-                  tooltipPosition="top"
-                  (click)="calculatePrice(item)"
-                ></button>
-              }
+              <button
+                pButton
+                type="button"
+                [text]="true"
+                [rounded]="true"
+                severity="success"
+                icon="pi pi-calculator"
+                aria-label="Calculate price"
+                pTooltip="Calculate price"
+                tooltipPosition="top"
+                (click)="calculatePrice(item)"
+              ></button>
               <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-pencil" aria-label="Edit" (click)="edit(item)"></button>
               <button pButton type="button" [text]="true" [rounded]="true" severity="danger" icon="pi pi-trash" aria-label="Delete" (click)="delete(item)"></button>
             </td>
@@ -58,6 +62,7 @@
       </p-table>
     }
   </p-card>
+  </div>
 </div>
 
 <p-dialog
@@ -109,6 +114,34 @@
       <button pButton type="submit" label="Save" icon="pi pi-check" [loading]="saving()"></button>
     </div>
   </form>
+</p-dialog>
+
+<p-dialog
+  header="Calculate price"
+  [visible]="priceItem() !== null"
+  (visibleChange)="priceItem.set($event ? priceItem() : null)"
+  [modal]="true"
+  [style]="{ width: '24rem' }"
+>
+  <div class="flex flex-col gap-4">
+    <p>Calculate the price of {{ priceItem()?.productName }}.</p>
+    <p-select
+      [options]="pricings()"
+      optionLabel="name"
+      optionValue="name"
+      placeholder="Select a pricing"
+      appendTo="body"
+      [ngModel]="pricingName()"
+      (ngModelChange)="pricingName.set($event)"
+    />
+    @if (priceError()) {
+      <small class="text-red-500">{{ priceError() }}</small>
+    }
+    <div class="flex justify-end gap-2">
+      <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="priceItem.set(null)"></button>
+      <button pButton type="button" label="Calculate" icon="pi pi-calculator" [loading]="calculating()" (click)="confirmPrice()"></button>
+    </div>
+  </div>
 </p-dialog>
 
 <p-confirmdialog />

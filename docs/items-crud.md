@@ -25,6 +25,9 @@ Create and update never set the price, and update keeps the existing price. The 
 | POST | `/api/items` | Created item, or 400 when validation fails. `/api/items/create-item` is kept as an alias |
 | PUT | `/api/items/{id}` | Updated item, 404 when missing, or 400 when validation fails |
 | DELETE | `/api/items/{id}` | 204, 404 when missing, or 409 when an order line uses the item |
+| POST | `/api/items/{id}/price` | Body `{ "pricingName": "Standard" }`. Calculates the price, saves it on the item, and returns the breakdown. 404 when the item or pricing is missing, 400 when the pricing name is unknown |
+
+The calculator button is on every row. It asks for Standard or Urgent, then calls this endpoint. Calculating again replaces the saved price.
 
 ## Effect on orders
 
