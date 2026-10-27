@@ -11,8 +11,8 @@ using SpooLLedger.Infrastructure.Data.DatabaseContext;
 namespace SpooLLedger.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20261015130241_SplitItemFromOrderItem")]
-    partial class SplitItemFromOrderItem
+    [Migration("20261027171649_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,9 +22,9 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("SpooLLedger.Domain.Entities.Customer", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
@@ -57,11 +57,30 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("SpooLLedger.Domain.Entities.FilamentType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("FilamentTypes");
+                });
+
             modelBuilder.Entity("SpooLLedger.Domain.Entities.Item", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("PricePerUnit")
                         .HasPrecision(18, 2)
@@ -86,8 +105,8 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("TEXT");
@@ -112,12 +131,12 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("SpooLLedger.Domain.Entities.OrderItem", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("ItemId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("OrderId")
                         .HasColumnType("TEXT");
@@ -132,6 +151,37 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("SpooLLedger.Domain.Entities.Pricing", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("ElectricityCostPerKwh")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("FilamentSpoolPrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("PrinterMaintenanceCostPerHour")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Pricings");
                 });
 
             modelBuilder.Entity("SpooLLedger.Domain.FilamentStock", b =>

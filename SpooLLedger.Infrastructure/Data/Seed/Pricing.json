@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Standard",
+    "electricityCostPerKwh": 1.5,
+    "filamentSpoolPrice": 30,
+    "printerMaintenanceCostPerHour": 0.5
+  },
+  {
+    "name": "Urgent",
+    "electricityCostPerKwh": 1.5,
+    "filamentSpoolPrice": 30,
+    "printerMaintenanceCostPerHour": 1.0
+  }
+]

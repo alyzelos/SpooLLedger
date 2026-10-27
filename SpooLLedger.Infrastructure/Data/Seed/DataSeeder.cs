@@ -25,6 +25,17 @@ public class DataSeeder
         await dataContext.SaveChangesAsync();
     }
 
+    public static async Task SeedPricing(DataContext dataContext)
+    {
+        if (await dataContext.Pricings.AnyAsync()) return;
+
+        var pricings = await ReadSeed<Pricing>("Pricing.json");
+        if (pricings.Count == 0) return;
+
+        dataContext.Pricings.AddRange(pricings);
+        await dataContext.SaveChangesAsync();
+    }
+
     public static async Task SeedFilamentStock(DataContext dataContext)
     {
         if (await dataContext.FilamentStocks.AnyAsync()) return;

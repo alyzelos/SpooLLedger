@@ -1,0 +1,95 @@
+<div class="p-6">
+  <p-card header="Pricing">
+    <div class="mb-4">
+      <button pButton type="button" icon="pi pi-plus" label="Add" (click)="add()"></button>
+    </div>
+
+    @if (error()) {
+      <p>{{ error() }}</p>
+    } @else if (pricings() === null) {
+      <p>Loading pricing...</p>
+    } @else if (pricings()!.length === 0) {
+      <p>No pricing yet.</p>
+    } @else {
+      <p-table [value]="pricings()!" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header>
+          <tr>
+            <th>Name</th>
+            <th>Electricity / kWh</th>
+            <th>Filament / 1 kg spool</th>
+            <th>Filament / gram</th>
+            <th>Maintenance / hour</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item>
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.electricityCostPerKwh | currency: 'EUR' : 'symbol' : '1.2-4' }}</td>
+            <td>{{ item.filamentSpoolPrice | currency: 'EUR' }}</td>
+            <td>{{ item.filamentCostPerGram | currency: 'EUR' : 'symbol' : '1.2-4' }}</td>
+            <td>{{ item.printerMaintenanceCostPerHour | currency: 'EUR' : 'symbol' : '1.2-4' }}</td>
+            <td>
+              <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-pencil" aria-label="Edit" (click)="edit(item)"></button>
+              <button pButton type="button" [text]="true" [rounded]="true" severity="danger" icon="pi pi-trash" aria-label="Delete" (click)="delete(item)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </p-card>
+</div>
+
+<p-dialog
+  [header]="editingId() === null ? 'Add pricing' : 'Edit pricing'"
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  [style]="{ width: '28rem' }"
+>
+  <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="name">Name</label>
+      <input pInputText id="name" formControlName="name" maxlength="100" [invalid]="invalid('name')" />
+      @if (invalid('name')) {
+        <small class="text-red-500">Name is required.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="electricity">Electricity cost per kWh</label>
+      <p-inputnumber inputId="electricity" formControlName="electricityCostPerKwh" [min]="0" [minFractionDigits]="2" [maxFractionDigits]="4" [invalid]="invalid('electricityCostPerKwh')" />
+      @if (invalid('electricityCostPerKwh')) {
+        <small class="text-red-500">Must be zero or greater.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="spool">Filament price per 1 kg spool</label>
+      <p-inputnumber inputId="spool" formControlName="filamentSpoolPrice" [min]="0" [minFractionDigits]="2" [maxFractionDigits]="2" [invalid]="invalid('filamentSpoolPrice')" />
+      <small class="text-surface-500">{{ pricePerGram() | currency: 'EUR' : 'symbol' : '1.2-4' }} per gram</small>
+      @if (invalid('filamentSpoolPrice')) {
+        <small class="text-red-500">Must be zero or greater.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="maintenance">Printer maintenance cost per hour</label>
+      <p-inputnumber inputId="maintenance" formControlName="printerMaintenanceCostPerHour" [min]="0" [minFractionDigits]="2" [maxFractionDigits]="4" [invalid]="invalid('printerMaintenanceCostPerHour')" />
+      @if (invalid('printerMaintenanceCostPerHour')) {
+        <small class="text-red-500">Must be zero or greater.</small>
+      }
+    </div>
+
+    @if (saveError()) {
+      <small class="text-red-500">{{ saveError() }}</small>
+    }
+
+    <div class="flex justify-end gap-2">
+      <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="dialogVisible.set(false)"></button>
+      <button pButton type="submit" label="Save" icon="pi pi-check" [loading]="saving()"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-confirmdialog />

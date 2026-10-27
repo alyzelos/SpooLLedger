@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\Pricing.json" Link="Data\Seed\Pricing.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\SpooLLedger.Infrastructure\Data\Seed\FilamentType.json" Link="Data\Seed\FilamentType.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
