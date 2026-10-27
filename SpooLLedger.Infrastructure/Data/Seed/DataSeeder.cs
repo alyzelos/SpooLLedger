@@ -14,6 +14,17 @@ public class DataSeeder
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
+    public static async Task SeedFilamentTypes(DataContext dataContext)
+    {
+        if (await dataContext.FilamentTypes.AnyAsync()) return;
+
+        var types = await ReadSeed<FilamentType>("FilamentType.json");
+        if (types.Count == 0) return;
+
+        dataContext.FilamentTypes.AddRange(types);
+        await dataContext.SaveChangesAsync();
+    }
+
     public static async Task SeedFilamentStock(DataContext dataContext)
     {
         if (await dataContext.FilamentStocks.AnyAsync()) return;

@@ -54,6 +54,25 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("SpooLLedger.Domain.Entities.FilamentType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("FilamentTypes");
+                });
+
             modelBuilder.Entity("SpooLLedger.Domain.Entities.Item", b =>
                 {
                     b.Property<int>("Id")

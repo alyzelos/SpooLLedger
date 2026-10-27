@@ -1,5 +1,9 @@
 <div class="p-6">
   <p-card header="Filament stock">
+    <div class="mb-4">
+      <button pButton type="button" icon="pi pi-plus" label="Add" (click)="add()"></button>
+    </div>
+
     @if (error()) {
       <p>{{ error() }}</p>
     } @else if (stock() === null) {
@@ -7,9 +11,93 @@
     } @else if (stock()!.length === 0) {
       <p>No filament records yet.</p>
     } @else {
-      @for (item of stock(); track item.id) {
-        <p>{{ item.producer }} — {{ item.type }} — {{ item.color }} — {{ item.quantity }}</p>
-      }
+      <p-table [value]="stock()!" dataKey="id" [tableStyle]="{ 'min-width': '40rem' }">
+        <ng-template #header>
+          <tr>
+            <th>Id</th>
+            <th>Producer</th>
+            <th>Type</th>
+            <th>Color</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item>
+          <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.producer }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.color }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>
+              <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-pencil" aria-label="Edit" (click)="edit(item)"></button>
+              <button pButton type="button" [text]="true" [rounded]="true" severity="danger" icon="pi pi-trash" aria-label="Delete" (click)="delete(item)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     }
   </p-card>
 </div>
+
+<p-dialog
+  [header]="editingId() === null ? 'Add filament' : 'Edit filament'"
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  [style]="{ width: '26rem' }"
+>
+  <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="producer">Producer</label>
+      <input pInputText id="producer" formControlName="producer" maxlength="100" [invalid]="invalid('producer')" />
+      @if (invalid('producer')) {
+        <small class="text-red-500">Producer is required.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="type">Type</label>
+      <p-select
+        inputId="type"
+        formControlName="type"
+        [options]="types()"
+        optionLabel="name"
+        optionValue="name"
+        placeholder="Select a type"
+        appendTo="body"
+        [invalid]="invalid('type')"
+      />
+      @if (invalid('type')) {
+        <small class="text-red-500">Select a filament type.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="color">Color</label>
+      <input pInputText id="color" formControlName="color" maxlength="100" [invalid]="invalid('color')" />
+      @if (invalid('color')) {
+        <small class="text-red-500">Color is required.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="quantity">Quantity</label>
+      <p-inputnumber inputId="quantity" formControlName="quantity" [min]="0" [showButtons]="true" [invalid]="invalid('quantity')" />
+      @if (invalid('quantity')) {
+        <small class="text-red-500">Quantity must be zero or greater.</small>
+      }
+    </div>
+
+    @if (saveError()) {
+      <small class="text-red-500">{{ saveError() }}</small>
+    }
+
+    <div class="flex justify-end gap-2">
+      <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="dialogVisible.set(false)"></button>
+      <button pButton type="submit" label="Save" icon="pi pi-check" [loading]="saving()"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-confirmdialog />

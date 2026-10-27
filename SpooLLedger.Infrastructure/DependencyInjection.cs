@@ -10,6 +10,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddScoped<IFilamentStockRepository, FilamentStockRepository>();
+        services.AddScoped<IFilamentTypeRepository, FilamentTypeRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IItemsRepository, ItemsRepository>();

@@ -11,6 +11,13 @@ export interface FilamentStock {
   quantity: number;
 }
 
+export type FilamentStockInput = Omit<FilamentStock, 'id'>;
+
+export interface FilamentType {
+  id: number;
+  name: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FilamentStockService {
   private readonly http = inject(HttpClient);
@@ -18,5 +25,21 @@ export class FilamentStockService {
 
   getAll(): Observable<FilamentStock[]> {
     return this.http.get<FilamentStock[]>(this.baseUrl + 'stock');
+  }
+
+  getTypes(): Observable<FilamentType[]> {
+    return this.http.get<FilamentType[]>(this.baseUrl + 'filament-types');
+  }
+
+  create(input: FilamentStockInput): Observable<FilamentStock> {
+    return this.http.post<FilamentStock>(this.baseUrl + 'stock', input);
+  }
+
+  update(id: number, input: FilamentStockInput): Observable<FilamentStock> {
+    return this.http.put<FilamentStock>(this.baseUrl + 'stock/' + id, input);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(this.baseUrl + 'stock/' + id);
   }
 }

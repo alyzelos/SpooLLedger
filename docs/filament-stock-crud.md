@@ -69,8 +69,17 @@ flowchart TB
 | POST | `/api/stock` | Created row, or 400 when validation fails |
 | PUT | `/api/stock/{id}` | Updated row, 404 when missing, or 400 when validation fails |
 | DELETE | `/api/stock/{id}` | 204, or 404 when missing |
+| GET | `/api/filament-types` | List of filament types, sorted by name |
 
 Producer, type, and color are required and limited to 100 characters. Quantity must be zero or greater. An update also requires an id greater than zero.
+
+## Filament types
+
+Type is chosen from the `FilamentTypes` table, not typed freely. `FilamentStock.Type` is still a text column holding the type name, with no foreign key. The create and update validators call `IFilamentTypeRepository.ExistsAsync` and reject a name that is not in the table with HTTP 400.
+
+`FilamentTypesController` sends `GetFilamentTypesQuery`. The handler reads `IFilamentTypeRepository` and returns `FilamentTypeDto` (`id`, `name`). The Angular dialog uses this list for its Type dropdown.
+
+`DataSeeder.SeedFilamentTypes` fills the table from `FilamentType.json` on startup when it is empty, before the stock seed runs. The seed holds PLA, PET-G, ASA, ABS, and TPU. Names are unique.
 
 The API listens on `http://localhost:5100` from `launchSettings.json`.
 
@@ -109,6 +118,8 @@ curl -X DELETE http://localhost:5100/api/stock/1
 ## Where the pieces live
 
 - Repository contract: `SpooLLedger.Application/Abstractions/IFilamentStockRepository.cs`
+- Filament type contract, query, and DTO: `SpooLLedger.Application/Abstractions/IFilamentTypeRepository.cs` and `SpooLLedger.Application/FilamentTypes`
+- Filament type repository and seed: `SpooLLedger.Infrastructure/Repositories/FilamentTypeRepository.cs` and `SpooLLedger.Infrastructure/Data/Seed/FilamentType.json`
 - Commands, queries, validators, and mapper: `SpooLLedger.Application/FilamentStock`
 - Repository implementation: `SpooLLedger.Infrastructure/Repositories/FilamentStockRepository.cs`
 - Handler and validator tests: `SpooLLedger.Tests`
