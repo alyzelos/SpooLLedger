@@ -4,6 +4,7 @@
     "orderNumber": 1,
     "orderDate": "2026-03-12T10:15:00Z",
     "status": "Pending",
+    "pricingName": "Standard",
     "customerId": 1
   },
   {
@@ -11,6 +12,7 @@
     "orderNumber": 2,
     "orderDate": "2026-03-20T14:40:00Z",
     "status": "Printing",
+    "pricingName": "Urgent",
     "customerId": 2
   },
   {
@@ -18,13 +20,15 @@
     "orderNumber": 3,
     "orderDate": "2026-04-02T08:05:00Z",
     "status": "Shipped",
+    "pricingName": "Standard",
     "customerId": 3
   },
   {
     "id": "a2000000-0000-4000-8000-000000000004",
     "orderNumber": 4,
     "orderDate": "2026-04-15T16:20:00Z",
-    "status": "Delivered",
+    "status": "Confirmed payment",
+    "pricingName": "Standard",
     "customerId": 1
   },
   {
@@ -32,6 +36,7 @@
     "orderNumber": 5,
     "orderDate": "2026-05-01T11:30:00Z",
     "status": "Cancelled",
+    "pricingName": "Urgent",
     "customerId": 5
   }
 ]

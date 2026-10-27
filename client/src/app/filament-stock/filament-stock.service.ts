@@ -31,6 +31,10 @@ export class FilamentStockService {
     return this.http.get<FilamentType[]>(this.baseUrl + 'filament-types');
   }
 
+  getColors(): Observable<FilamentType[]> {
+    return this.http.get<FilamentType[]>(this.baseUrl + 'filament-colors');
+  }
+
   create(input: FilamentStockInput): Observable<FilamentStock> {
     return this.http.post<FilamentStock>(this.baseUrl + 'stock', input);
   }

@@ -12,7 +12,8 @@ public static class FilamentStockRules
         IRuleBuilderInitial<T, string> type,
         IRuleBuilderInitial<T, string> color,
         IRuleBuilderInitial<T, int> quantity,
-        IFilamentTypeRepository filamentTypes)
+        IFilamentTypeRepository filamentTypes,
+        IFilamentColorRepository filamentColors)
     {
         producer.NotEmpty().MaximumLength(MaxTextLength);
         type.Cascade(CascadeMode.Stop)
@@ -20,7 +21,11 @@ public static class FilamentStockRules
             .MaximumLength(MaxTextLength)
             .MustAsync(filamentTypes.ExistsAsync)
             .WithMessage("'{PropertyValue}' is not a known filament type.");
-        color.NotEmpty().MaximumLength(MaxTextLength);
+        color.Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .MaximumLength(MaxTextLength)
+            .MustAsync(filamentColors.ExistsAsync)
+            .WithMessage("'{PropertyValue}' is not a known filament color.");
         quantity.GreaterThanOrEqualTo(0);
     }
 }

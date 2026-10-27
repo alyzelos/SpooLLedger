@@ -6,14 +6,15 @@ namespace SpooLLedger.Application.FilamentStock.Commands;
 
 public class CreateFilamentStockValidator : AbstractValidator<CreateFilamentStockCommand>
 {
-    public CreateFilamentStockValidator(IFilamentTypeRepository filamentTypes)
+    public CreateFilamentStockValidator(IFilamentTypeRepository filamentTypes, IFilamentColorRepository filamentColors)
     {
         FilamentStockRules.ApplyStockRules(
             RuleFor(x => x.Producer),
             RuleFor(x => x.Type), 
             RuleFor(x => x.Color), 
             RuleFor(x => x.Quantity),
-            filamentTypes
+            filamentTypes,
+            filamentColors
         );
     }
 }

@@ -70,6 +70,7 @@ flowchart TB
 | PUT | `/api/stock/{id}` | Updated row, 404 when missing, or 400 when validation fails |
 | DELETE | `/api/stock/{id}` | 204, or 404 when missing |
 | GET | `/api/filament-types` | List of filament types, sorted by name |
+| GET | `/api/filament-colors` | List of filament colors, sorted by name |
 
 Producer, type, and color are required and limited to 100 characters. Quantity must be zero or greater. An update also requires an id greater than zero.
 
@@ -80,6 +81,10 @@ Type is chosen from the `FilamentTypes` table, not typed freely. `FilamentStock.
 `FilamentTypesController` lists, creates, updates, and deletes types. The name is required, at most 100 characters, and unique. Deleting a type that a stock row still uses returns 409. Renaming a type also renames that text on the stock rows that use it, in the same save. The stock dialog and the Resources page both read this list. The Resources page shows a Filament types card between Customers and Items, with add, edit, delete, and the same 5, 10, 15, and 20 page sizes.
 
 `DataSeeder.SeedFilamentTypes` fills the table from `FilamentType.json` on startup when it is empty, before the stock seed runs. The seed holds PLA, PET-G, ASA, ABS, and TPU. Names are unique.
+
+## Filament colors
+
+Color is chosen from the `FilamentColors` table. `FilamentStock.Color` stays a text column holding the color name, with no foreign key. The create and update validators call `IFilamentColorRepository.ExistsAsync` and reject a name that is not in the table with HTTP 400. `GET /api/filament-colors` returns the list. `DataSeeder.SeedFilamentColors` fills the table from `FilamentColor.json` when it is empty, after types and before stock. The seed holds Oh My Gold, Azure Blue, Lipstick Red, and Blend My Silverness. Names are unique.
 
 The API listens on `http://localhost:5100` from `launchSettings.json`.
 
@@ -120,6 +125,7 @@ curl -X DELETE http://localhost:5100/api/stock/1
 - Repository contract: `SpooLLedger.Application/Abstractions/IFilamentStockRepository.cs`
 - Filament type contract, query, and DTO: `SpooLLedger.Application/Abstractions/IFilamentTypeRepository.cs` and `SpooLLedger.Application/FilamentTypes`
 - Filament type repository and seed: `SpooLLedger.Infrastructure/Repositories/FilamentTypeRepository.cs` and `SpooLLedger.Infrastructure/Data/Seed/FilamentType.json`
+- Filament color contract, query, and seed: `SpooLLedger.Application/Abstractions/IFilamentColorRepository.cs`, `SpooLLedger.Application/FilamentColors`, and `SpooLLedger.Infrastructure/Data/Seed/FilamentColor.json`
 - Commands, queries, validators, and mapper: `SpooLLedger.Application/FilamentStock`
 - Repository implementation: `SpooLLedger.Infrastructure/Repositories/FilamentStockRepository.cs`
 - Handler and validator tests: `SpooLLedger.Tests`

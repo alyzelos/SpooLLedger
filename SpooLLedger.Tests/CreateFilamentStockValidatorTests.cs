@@ -14,7 +14,11 @@ public class CreateFilamentStockValidatorTests
         filamentTypes
             .Setup(r => r.ExistsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string name, CancellationToken _) => name == "PLA");
-        _validator = new CreateFilamentStockValidator(filamentTypes.Object);
+        var filamentColors = new Mock<IFilamentColorRepository>();
+        filamentColors
+            .Setup(r => r.ExistsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((string name, CancellationToken _) => name == "Black");
+        _validator = new CreateFilamentStockValidator(filamentTypes.Object, filamentColors.Object);
     }
 
     [Fact]

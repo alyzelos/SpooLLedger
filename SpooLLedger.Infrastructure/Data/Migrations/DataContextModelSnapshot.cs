@@ -54,6 +54,25 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("SpooLLedger.Domain.Entities.FilamentColor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("FilamentColors");
+                });
+
             modelBuilder.Entity("SpooLLedger.Domain.Entities.FilamentType", b =>
                 {
                     b.Property<int>("Id")
@@ -118,10 +137,18 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     b.Property<int>("OrderNumber")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("PricingName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("StockAdjusted")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -138,6 +165,19 @@ namespace SpooLLedger.Infrastructure.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CompletedQuantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("FilamentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("INTEGER");

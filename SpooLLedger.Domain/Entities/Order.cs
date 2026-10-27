@@ -9,6 +9,8 @@ public class Order
     public int OrderNumber { get; set; }
     public DateTime OrderDate { get;  set; }
     public string Status { get; set; } = "Pending";
+    public string PricingName { get; set; } = "Standard";
+    public bool StockAdjusted { get; set; }
 
     // LINK TO CUSTOMER: Every order belongs to a specific Customer
     public int CustomerId { get; set; }

@@ -11,6 +11,7 @@ public static class DependencyInjection
     {
         services.AddScoped<IFilamentStockRepository, FilamentStockRepository>();
         services.AddScoped<IFilamentTypeRepository, FilamentTypeRepository>();
+        services.AddScoped<IFilamentColorRepository, FilamentColorRepository>();
         services.AddScoped<IPricingRepository, PricingRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();

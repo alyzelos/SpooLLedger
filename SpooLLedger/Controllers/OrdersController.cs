@@ -2,6 +2,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SpooLLedger.Application.CQRS.Order.Commands.CreateOrder;
+using SpooLLedger.Application.CQRS.Order.Commands.DeleteOrder;
 using SpooLLedger.Application.CQRS.Order.Commands.CustomCommand;
 using SpooLLedger.Application.CQRS.Order.Commands.UpdateOrder;
 using SpooLLedger.Application.CQRS.Order.Queries;
@@ -60,6 +61,13 @@ public class OrdersController(ISender mediator) : ControllerBase
         {
             return Xml(CreateOrderSoapXml.WriteFault(exception.Message), StatusCodes.Status400BadRequest);
         }
+    }
+
+    [HttpDelete("{orderNumber:int}")]
+    public async Task<IActionResult> DeleteOrder(int orderNumber, CancellationToken cancellationToken)
+    {
+        var deleted = await mediator.Send(new DeleteOrderCommand(orderNumber), cancellationToken);
+        return deleted ? NoContent() : NotFound();
     }
 
     [HttpPut("update")]

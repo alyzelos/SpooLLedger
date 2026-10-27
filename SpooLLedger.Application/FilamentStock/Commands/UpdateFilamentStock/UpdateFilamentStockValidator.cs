@@ -6,7 +6,7 @@ namespace SpooLLedger.Application.FilamentStock.Commands;
 
 public class UpdateFilamentStockValidator : AbstractValidator<UpdateFilamentStockCommand>
 {
-    public UpdateFilamentStockValidator(IFilamentTypeRepository filamentTypes)
+    public UpdateFilamentStockValidator(IFilamentTypeRepository filamentTypes, IFilamentColorRepository filamentColors)
     {
         RuleFor(x => x.Id).GreaterThan(0);
         FilamentStockRules.ApplyStockRules(
@@ -14,6 +14,7 @@ public class UpdateFilamentStockValidator : AbstractValidator<UpdateFilamentStoc
             RuleFor(x => x.Type), 
             RuleFor(x => x.Color), 
             RuleFor(x => x.Quantity),
-            filamentTypes);
+            filamentTypes,
+            filamentColors);
     }
 }

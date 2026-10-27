@@ -1,5 +1,4 @@
-<div class="p-6">
-  <p-card header="Filament stock">
+<p-card header="Filament stock">
     <div class="mb-4">
       <button pButton type="button" icon="pi pi-plus" label="Add" (click)="add()"></button>
     </div>
@@ -11,7 +10,7 @@
     } @else if (stock()!.length === 0) {
       <p>No filament records yet.</p>
     } @else {
-      <p-table [value]="stock()!" dataKey="id" [tableStyle]="{ 'min-width': '40rem' }">
+      <p-table [value]="stock()!" dataKey="id" [paginator]="true" [rows]="5" [rowsPerPageOptions]="pageSizes" [tableStyle]="{ 'min-width': '40rem' }">
         <ng-template #header>
           <tr>
             <th>Id</th>
@@ -28,7 +27,7 @@
             <td>{{ item.producer }}</td>
             <td>{{ item.type }}</td>
             <td>{{ item.color }}</td>
-            <td>{{ item.quantity }}</td>
+            <td><span [ngStyle]="quantityStyle(item.quantity)">{{ item.quantity }} g</span></td>
             <td>
               <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-pencil" aria-label="Edit" (click)="edit(item)"></button>
               <button pButton type="button" [text]="true" [rounded]="true" severity="danger" icon="pi pi-trash" aria-label="Delete" (click)="delete(item)"></button>
@@ -37,8 +36,7 @@
         </ng-template>
       </p-table>
     }
-  </p-card>
-</div>
+</p-card>
 
 <p-dialog
   [header]="editingId() === null ? 'Add filament' : 'Edit filament'"
@@ -75,9 +73,18 @@
 
     <div class="flex flex-col gap-1">
       <label for="color">Color</label>
-      <input pInputText id="color" formControlName="color" maxlength="100" [invalid]="invalid('color')" />
+      <p-select
+        inputId="color"
+        formControlName="color"
+        [options]="colors()"
+        optionLabel="name"
+        optionValue="name"
+        placeholder="Select a color"
+        appendTo="body"
+        [invalid]="invalid('color')"
+      />
       @if (invalid('color')) {
-        <small class="text-red-500">Color is required.</small>
+        <small class="text-red-500">Select a filament color.</small>
       }
     </div>
 

@@ -3,30 +3,40 @@
     "id": 1,
     "orderId": "a2000000-0000-4000-8000-000000000001",
     "itemId": 1,
+    "filamentType": "PLA",
+    "color": "Oh My Gold",
     "quantity": 2
   },
   {
     "id": 2,
     "orderId": "a2000000-0000-4000-8000-000000000002",
     "itemId": 2,
+    "filamentType": "PLA",
+    "color": "Azure Blue",
     "quantity": 1
   },
   {
     "id": 3,
     "orderId": "a2000000-0000-4000-8000-000000000003",
     "itemId": 3,
+    "filamentType": "PLA",
+    "color": "Lipstick Red",
     "quantity": 3
   },
   {
     "id": 4,
     "orderId": "a2000000-0000-4000-8000-000000000004",
     "itemId": 4,
+    "filamentType": "PLA",
+    "color": "Blend My Silverness",
     "quantity": 2
   },
   {
     "id": 5,
     "orderId": "a2000000-0000-4000-8000-000000000005",
     "itemId": 5,
+    "filamentType": "PET-G",
+    "color": "Oh My Gold",
     "quantity": 4
   }
 ]

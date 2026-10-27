@@ -12,5 +12,6 @@ public interface IOrderRepository
     public Task<CustomOrderCommandResponse> GetCustomOrder(int orderNumber, CancellationToken cancellationToken);
     public Task<Order> CreateOrder(CreateOrderCommand command, CancellationToken cancellationToken);
     public Task<Order> UpdateOrder(UpdateOrderCommand command, CancellationToken cancellationToken);
-
+    Task<bool> DeleteByOrderNumberAsync(int orderNumber, CancellationToken cancellationToken);
+    Task ApplyOutstandingFilamentAsync(CancellationToken cancellationToken);
 }

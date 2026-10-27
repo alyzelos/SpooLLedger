@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SpooLLedger.Application;
+using SpooLLedger.Application.Abstractions;
 using SpooLLedger.Exceptions;
 using SpooLLedger.Infrastructure;
 using SpooLLedger.Infrastructure.Data.DatabaseContext;
@@ -33,12 +34,14 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<DataContext>();
         await context.Database.MigrateAsync();
         await DataSeeder.SeedFilamentTypes(context);
+        await DataSeeder.SeedFilamentColors(context);
         await DataSeeder.SeedFilamentStock(context);
         await DataSeeder.SeedPricing(context);
         await DataSeeder.SeedCustomers(context);
         await DataSeeder.SeedItems(context);
         await DataSeeder.SeedOrders(context);
         await DataSeeder.SeedOrderItems(context);
+        await services.GetRequiredService<IOrderRepository>().ApplyOutstandingFilamentAsync(CancellationToken.None);
     }
     catch
     {

@@ -1,0 +1,285 @@
+<div class="p-6 orders-layout">
+  <p-card styleClass="status-card">
+    @if (orders() === null) {
+      <p>Loading...</p>
+    } @else {
+      <section class="queue-section">
+        <p class="section-title">Print queue</p>
+        <p class="queue-hours">{{ printingDays() }} {{ printingDays() === 1 ? 'day' : 'days' }}</p>
+        <p class="queue-note">{{ formatDuration(printingRemainderMinutes()) }} left that day</p>
+        <p class="queue-note">{{ formatDuration(printingMinutesLeft()) }} of printing in total</p>
+        <p class="queue-note">Next order can start {{ nextStartDate() | date: 'mediumDate' }}</p>
+      </section>
+      <section class="queue-section">
+        <p class="section-title">Order status</p>
+        <div class="status-bars">
+        @for (bar of statusBars(); track bar.label) {
+          <div>
+            <div class="bar-label">
+              <span>{{ bar.label }}</span>
+              <span>{{ bar.count }} · {{ bar.percent }}%</span>
+            </div>
+            <p-progressbar [value]="bar.percent" [showValue]="false" [style]="{ height: '0.5rem', '--p-progressbar-value-background': bar.color }" />
+          </div>
+        }
+        </div>
+      </section>
+      <section class="queue-section low-stock">
+        <p class="section-title">Low stock</p>
+        @if (lowStock().length === 0) {
+          <p class="queue-note">No filament under 300 g.</p>
+        } @else {
+          @for (item of lowStock(); track item.id) {
+            <p class="low-stock-row">
+              <span>{{ item.type }} · {{ item.color }}</span>
+              <span [ngStyle]="lowStockStyle()">{{ item.quantity }} g</span>
+            </p>
+          }
+        }
+      </section>
+    }
+  </p-card>
+  <div>
+  <p-card header="Orders">
+    <div class="mb-4">
+      <button pButton type="button" icon="pi pi-plus" label="Add" (click)="add()"></button>
+    </div>
+
+    @if (error()) {
+      <p>{{ error() }}</p>
+    } @else if (orders() === null) {
+      <p>Loading orders...</p>
+    } @else if (orders()!.length === 0) {
+      <p>No orders yet.</p>
+    } @else {
+      <p-table [value]="orders()!" dataKey="orderNumber" [expandedRowKeys]="expanded" [tableStyle]="{ 'min-width': '40rem' }">
+        <ng-template #header>
+          <tr>
+            <th style="width: 3rem"></th>
+            <th>Order number</th>
+            <th>Date</th>
+            <th>Customer name</th>
+            <th>Pricing</th>
+            <th>Status</th>
+            <th>Completion</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-order let-expanded="expanded">
+          <tr>
+            <td>
+              <button pButton type="button" [pRowToggler]="order" [text]="true" [rounded]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" aria-label="Toggle order lines"></button>
+            </td>
+            <td>
+              <span class="order-number">
+                #{{ order.orderNumber }}
+                <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-pencil" aria-label="Edit" (click)="edit(order)"></button>
+                <button pButton type="button" [text]="true" [rounded]="true" severity="danger" icon="pi pi-trash" aria-label="Delete" (click)="remove(order)"></button>
+              </span>
+            </td>
+            <td>{{ order.orderDate | date: 'mediumDate' }}</td>
+            <td>{{ order.customerName }}</td>
+            <td>
+              <span [ngStyle]="pricingStyle(order.pricingName)">{{ order.pricingName }}</span>
+            </td>
+            <td>
+              <span [ngStyle]="statusStyle(order.status)">{{ statusLabel(order) }}</span>
+            </td>
+            <td>{{ completion(order) }}%</td>
+          </tr>
+        </ng-template>
+        <ng-template #expandedrow let-order>
+          <tr>
+            <td colspan="7">
+              <table class="lines">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Filament</th>
+                    <th>Color</th>
+                    <th>Instances</th>
+                    <th>Filament needed</th>
+                    <th>Print time</th>
+                    <th>Price</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (line of order.items; track line.itemId + line.filamentType + line.color) {
+                    <tr>
+                      @if (lineEdit()?.orderNumber === order.orderNumber && lineEdit()?.itemId === line.itemId && lineEdit()?.filamentType === line.filamentType && lineEdit()?.color === line.color) {
+                        <td colspan="8">
+                          <div class="flex flex-wrap items-center gap-2">
+                            <p-select [options]="items()" optionLabel="productName" optionValue="id" placeholder="Select an item" [filter]="true" filterBy="productName" appendTo="body" [ngModel]="lineItemId()" (ngModelChange)="lineItemId.set($event)" />
+                            <p-select [options]="filamentTypes()" optionLabel="name" optionValue="name" placeholder="Filament" appendTo="body" [ngModel]="lineFilamentType()" (ngModelChange)="lineFilamentType.set($event)" />
+                            <p-select [options]="filamentColors()" optionLabel="name" optionValue="name" placeholder="Color" appendTo="body" [ngModel]="lineColor()" (ngModelChange)="lineColor.set($event)" />
+                            <p-inputnumber [ngModel]="lineQuantity()" (ngModelChange)="lineQuantity.set($event)" [min]="1" [showButtons]="true" suffix=" pcs" />
+                            <p-inputnumber [ngModel]="lineCompleted()" (ngModelChange)="lineCompleted.set($event)" [min]="0" [max]="lineQuantity() || 1" [showButtons]="true" suffix=" done" />
+                            <button pButton type="button" icon="pi pi-check" label="Save" [loading]="savingLine()" (click)="saveLine(order)"></button>
+                            <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="cancelLine()"></button>
+                          </div>
+                        </td>
+                      } @else {
+                        <td>{{ line.productName }}</td>
+                        <td>{{ line.filamentType }}</td>
+                        <td>{{ line.color }}</td>
+                        <td class="whitespace-nowrap">
+                          {{ line.completedQuantity ?? 0 }} / {{ line.quantity }}
+                          <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-plus" aria-label="Complete one" [disabled]="(line.completedQuantity ?? 0) >= line.quantity || savingLine()" (click)="completeOne(order, line)"></button>
+                        </td>
+                        <td>{{ line.weight * line.quantity }} g</td>
+                        <td>{{ formatDuration(line.printDurationMinutes * line.quantity) }}</td>
+                        <td>
+                          @if (line.pricePerUnit !== null) {
+                            {{ line.totalPrice | currency: 'EUR' }}
+                          } @else {
+                            Not set
+                          }
+                        </td>
+                        <td class="whitespace-nowrap">
+                          <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-pencil" aria-label="Edit item" (click)="startLineEdit(order, line)"></button>
+                          <button pButton type="button" [text]="true" [rounded]="true" severity="danger" icon="pi pi-trash" aria-label="Delete item" (click)="deleteLine(order, line)"></button>
+                        </td>
+                      }
+                    </tr>
+                  }
+                  @if (draftOrder() === order.orderNumber) {
+                    <tr>
+                      <td colspan="8">
+                        <div class="flex flex-wrap items-center gap-2">
+                          <p-select [options]="items()" optionLabel="productName" optionValue="id" placeholder="Select an item" [filter]="true" filterBy="productName" appendTo="body" [ngModel]="lineItemId()" (ngModelChange)="lineItemId.set($event)" />
+                          <p-select [options]="filamentTypes()" optionLabel="name" optionValue="name" placeholder="Filament" appendTo="body" [ngModel]="lineFilamentType()" (ngModelChange)="lineFilamentType.set($event)" />
+                          <p-select [options]="filamentColors()" optionLabel="name" optionValue="name" placeholder="Color" appendTo="body" [ngModel]="lineColor()" (ngModelChange)="lineColor.set($event)" />
+                          <p-inputnumber [ngModel]="lineQuantity()" (ngModelChange)="lineQuantity.set($event)" [min]="1" [showButtons]="true" suffix=" pcs" />
+                          <button pButton type="button" icon="pi pi-check" label="Save" [loading]="savingLine()" (click)="saveLine(order)"></button>
+                          <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="cancelLine()"></button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              <div class="mt-3">
+                <button pButton type="button" icon="pi pi-plus" label="Add item" (click)="startAdd(order)"></button>
+              </div>
+              @if (lineError()) {
+                <small class="text-red-500">{{ lineError() }}</small>
+              }
+              <p class="totals">
+                Total time {{ formatDuration(totalMinutes(order)) }}.
+                Total price
+                @if (missingPrice(order)) {
+                  {{ totalPrice(order) | currency: 'EUR' }} (some items have no price)
+                } @else {
+                  {{ totalPrice(order) | currency: 'EUR' }}
+                }.
+              </p>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </p-card>
+  </div>
+</div>
+
+<p-dialog [header]="editing() === null ? 'Add order' : 'Edit order'" [visible]="dialogVisible()" (visibleChange)="dialogVisible.set($event)" [modal]="true" [style]="{ width: '36rem' }" [contentStyle]="{ 'max-height': '60vh' }">
+  <form id="order-form" [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="customer">Customer</label>
+      <div class="flex gap-2">
+        <p-select
+          inputId="customer"
+          formControlName="customerId"
+          [options]="customers()"
+          optionLabel="fullName"
+          optionValue="id"
+          placeholder="Select a customer"
+          [filter]="true"
+          filterBy="fullName"
+          appendTo="body"
+          class="flex-1"
+        />
+        <button pButton type="button" icon="pi pi-user-plus" label="New" (click)="openCustomer()"></button>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="pricing">Pricing</label>
+      <p-select
+        inputId="pricing"
+        formControlName="pricingName"
+        [options]="pricings()"
+        optionLabel="name"
+        optionValue="name"
+        placeholder="Select a pricing"
+        appendTo="body"
+      />
+    </div>
+
+    @if (editing() !== null) {
+      <div class="flex flex-col gap-1">
+        <label for="status">Status</label>
+        <p-select inputId="status" formControlName="status" [options]="statuses" appendTo="body" />
+      </div>
+    }
+
+    @if (saveError()) {
+      <small class="text-red-500">{{ saveError() }}</small>
+    }
+
+  </form>
+  <ng-template #footer>
+    <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="dialogVisible.set(false)"></button>
+    <button pButton type="submit" form="order-form" label="Save" icon="pi pi-check" [loading]="saving()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Cancel order" [visible]="cancelStockVisible()" (visibleChange)="cancelStockVisible.set($event)" [modal]="true" [style]="{ width: '32rem' }">
+  @if (consumedGrams() === 0) {
+    <p>No pieces were finished. All filament from this order goes back to stock.</p>
+  } @else {
+    <p>Filament already used stays out of stock. The unused filament goes back.</p>
+  }
+  <table class="lines">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Color</th>
+        <th>Used</th>
+        <th>Returned</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of cancelStock(); track row.type + row.color) {
+        <tr>
+          <td>{{ row.type }}</td>
+          <td>{{ row.color }}</td>
+          <td>{{ row.used }} g</td>
+          <td>{{ row.returned }} g</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+  <ng-template #footer>
+    <button pButton type="button" label="Back" severity="secondary" [text]="true" (click)="cancelStockVisible.set(false)"></button>
+    <button pButton type="button" label="Cancel order" severity="danger" (click)="confirmCancel()"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="New customer" [visible]="customerDialogVisible()" (visibleChange)="customerDialogVisible.set($event)" [modal]="true" [style]="{ width: '26rem' }">
+  <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="flex flex-col gap-4">
+    <input pInputText formControlName="firstName" placeholder="First name" maxlength="100" />
+    <input pInputText formControlName="lastName" placeholder="Last name" maxlength="100" />
+    <input pInputText type="email" formControlName="email" placeholder="Email" maxlength="200" />
+    <input pInputText formControlName="phoneNumber" placeholder="Phone" maxlength="30" />
+    @if (customerError()) {
+      <small class="text-red-500">{{ customerError() }}</small>
+    }
+    <div class="flex justify-end gap-2">
+      <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="customerDialogVisible.set(false)"></button>
+      <button pButton type="submit" label="Add" icon="pi pi-check"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-confirmdialog />

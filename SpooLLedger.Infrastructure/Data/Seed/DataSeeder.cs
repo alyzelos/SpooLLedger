@@ -25,6 +25,17 @@ public class DataSeeder
         await dataContext.SaveChangesAsync();
     }
 
+    public static async Task SeedFilamentColors(DataContext dataContext)
+    {
+        if (await dataContext.FilamentColors.AnyAsync()) return;
+
+        var colors = await ReadSeed<FilamentColor>("FilamentColor.json");
+        if (colors.Count == 0) return;
+
+        dataContext.FilamentColors.AddRange(colors);
+        await dataContext.SaveChangesAsync();
+    }
+
     public static async Task SeedPricing(DataContext dataContext)
     {
         if (await dataContext.Pricings.AnyAsync()) return;

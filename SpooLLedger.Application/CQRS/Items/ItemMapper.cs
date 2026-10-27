@@ -18,7 +18,7 @@ public static class ItemMapper
 
     public static Item ToEntity(CreateItemCommand command) => new()
     {
-        ProductName = command.ProductName,
+        ProductName = command.ProductName.Trim(),
         Weight = command.Weight,
         PrintDurationMinutes = command.PrintDurationMinutes,
         Details = command.Details
@@ -26,7 +26,7 @@ public static class ItemMapper
 
     public static void Apply(UpdateItemCommand command, Item item)
     {
-        item.ProductName = command.ProductName;
+        item.ProductName = command.ProductName.Trim();
         item.Weight = command.Weight;
         item.PrintDurationMinutes = command.PrintDurationMinutes;
         item.Details = command.Details;

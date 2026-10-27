@@ -1,3 +1,4 @@
+import { NgStyle } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -24,6 +25,7 @@ import {
     CardModule,
     ConfirmDialogModule,
     DialogModule,
+    NgStyle,
     InputNumberModule,
     InputTextModule,
     ReactiveFormsModule,
@@ -32,16 +34,18 @@ import {
   ],
   providers: [ConfirmationService],
   templateUrl: './filament-stock.html',
-  styleUrl: './filament-stock.css',
+  styles: ':host { display: block; min-width: 0; }',
 })
 export class FilamentStockPage implements OnInit {
   private readonly filamentStockService = inject(FilamentStockService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly fb = inject(FormBuilder);
 
+  protected readonly pageSizes = [5, 10, 15, 20];
   protected readonly stock = signal<FilamentStock[] | null>(null);
   protected readonly error = signal<string | null>(null);
   protected readonly types = signal<FilamentType[]>([]);
+  protected readonly colors = signal<FilamentType[]>([]);
   protected readonly dialogVisible = signal(false);
   protected readonly editingId = signal<number | null>(null);
   protected readonly saving = signal(false);
@@ -57,6 +61,7 @@ export class FilamentStockPage implements OnInit {
   ngOnInit(): void {
     this.load();
     this.loadTypes();
+    this.loadColors();
   }
 
   protected add(): void {
@@ -117,6 +122,22 @@ export class FilamentStockPage implements OnInit {
     });
   }
 
+  protected quantityStyle(quantity: number): Record<string, string> {
+    const [background, color] = quantity < 300
+      ? ['#ef4444', '#ffffff']
+      : quantity <= 500
+        ? ['#facc15', '#713f12']
+        : ['#22c55e', '#052e16'];
+    return {
+      background,
+      color,
+      display: 'inline-block',
+      padding: '0.2rem 0.65rem',
+      'border-radius': '1rem',
+      'font-weight': '600',
+    };
+  }
+
   protected invalid(name: keyof FilamentStockInput): boolean {
     const control = this.form.controls[name];
     return control.invalid && control.touched;
@@ -127,6 +148,9 @@ export class FilamentStockPage implements OnInit {
     if (this.types().length === 0) {
       this.loadTypes();
     }
+    if (this.colors().length === 0) {
+      this.loadColors();
+    }
     this.dialogVisible.set(true);
   }
 
@@ -134,6 +158,13 @@ export class FilamentStockPage implements OnInit {
     this.filamentStockService.getTypes().subscribe({
       next: (response) => this.types.set(response),
       error: () => this.saveError.set('Could not load filament types.'),
+    });
+  }
+
+  private loadColors(): void {
+    this.filamentStockService.getColors().subscribe({
+      next: (response) => this.colors.set(response),
+      error: () => this.saveError.set('Could not load filament colors.'),
     });
   }
 

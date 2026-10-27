@@ -11,6 +11,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(o => o.Id);
         builder.HasIndex(o => o.OrderNumber).IsUnique();
         builder.Property(o => o.Status).IsRequired().HasMaxLength(30);
+        builder.Property(o => o.PricingName).IsRequired().HasMaxLength(100);
         builder.Ignore(o => o.TotalAmount);
 
         builder.HasOne(o => o.Customer)
