@@ -2,7 +2,7 @@
 
 15 October 2026
 
-An order belongs to one customer and has many order lines. Each line stores a quantity and points at a catalog `Item`. Product name, weight, and price live on `Item`. `Customer`, `Item`, and `OrderItem` use integer ids. `Order.Id` stays a Guid.
+An order belongs to one customer and has many order lines. Each line stores a quantity and points at a catalog `Item`. Product name, weight, print time, and price live on `Item` (see [items-crud.md](items-crud.md)). An item's price can be empty; an order line then reports a null unit price and a total price of zero. An item used by an order line cannot be deleted. `Customer`, `Item`, and `OrderItem` use integer ids. `Order.Id` stays a Guid.
 
 ## Endpoints
 

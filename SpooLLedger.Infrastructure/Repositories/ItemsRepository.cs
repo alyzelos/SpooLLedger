@@ -1,10 +1,5 @@
-using System;
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using SpooLLedger.Application.Abstractions;
-using SpooLLedger.Application.CQRS.Items.Commands.Create;
-using SpooLLedger.Application.CQRS.Items.Queries;
-using SpooLLedger.Application.CQRS.Items.Responses;
 using SpooLLedger.Domain.Entities;
 using SpooLLedger.Infrastructure.Data.DatabaseContext;
 
@@ -12,31 +7,30 @@ namespace SpooLLedger.Infrastructure.Repositories;
 
 public class ItemsRepository(DataContext dataContext) : IItemsRepository
 {
+    public async Task<IReadOnlyList<Item>> GetAllAsync(CancellationToken cancellationToken) =>
+        await dataContext.Items.AsNoTracking().OrderBy(i => i.ProductName).ToListAsync(cancellationToken);
 
-    public async Task<IReadOnlyList<Item>> GetAllItems(CancellationToken cancellationToken)
-    {
-        return await dataContext.Items
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
-    }
+    public Task<Item?> GetByIdAsync(int id, CancellationToken cancellationToken) =>
+        dataContext.Items.FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
 
-    public async Task<Item> GetItemById(GetItemByIdQuery query, CancellationToken cancellationToken)
-    {
-        var item = await dataContext.Items
-            .AsNoTracking()
-            .FirstOrDefaultAsync(i => i.Id == query.Id, cancellationToken) ?? throw new Exception("item was not found in db");
-        return item;
-    }
+    public Task<bool> IsUsedInOrdersAsync(int id, CancellationToken cancellationToken) =>
+        dataContext.OrderItems.AnyAsync(line => line.ItemId == id, cancellationToken);
 
-    public async Task<Item> CreateItem(CreateItemCommand command, CancellationToken cancellationToken)
+    public async Task AddAsync(Item item, CancellationToken cancellationToken)
     {
-        var item = new Item
-        {
-            ProductName = command.ProductName,
-            Weight = command.Weight
-        };
         dataContext.Items.Add(item);
         await dataContext.SaveChangesAsync(cancellationToken);
-        return  item;
+    }
+
+    public async Task UpdateAsync(Item item, CancellationToken cancellationToken)
+    {
+        dataContext.Items.Update(item);
+        await dataContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task DeleteAsync(Item item, CancellationToken cancellationToken)
+    {
+        dataContext.Items.Remove(item);
+        await dataContext.SaveChangesAsync(cancellationToken);
     }
 }

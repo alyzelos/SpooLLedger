@@ -9,5 +9,5 @@ public class OrderItem
     public int Quantity { get; set; }
 
     public decimal TotalWeight => Item is null ? 0 : Item.Weight * Quantity;
-    public decimal TotalPrice => Item is null ? 0 : Item.PricePerUnit * Quantity;
+    public decimal TotalPrice => (Item?.PricePerUnit ?? 0) * Quantity;
 }

@@ -11,6 +11,7 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
         builder.HasKey(item => item.Id);
         builder.Property(item => item.ProductName).IsRequired().HasMaxLength(100);
         builder.Property(item => item.PricePerUnit).HasPrecision(18, 2);
+        builder.Property(item => item.Details).HasMaxLength(1000);
 
         builder.HasMany(item => item.OrderItems)
             .WithOne(orderItem => orderItem.Item)

@@ -1,14 +1,13 @@
-using System;
-using SpooLLedger.Application.CQRS.Items.Commands.Create;
-using SpooLLedger.Application.CQRS.Items.Queries;
-using SpooLLedger.Application.CQRS.Items.Responses;
 using SpooLLedger.Domain.Entities;
 
 namespace SpooLLedger.Application.Abstractions;
 
 public interface IItemsRepository
 {
-    public Task<IReadOnlyList<Item>> GetAllItems(CancellationToken cancellationToken);
-    public Task<Item> GetItemById(GetItemByIdQuery query, CancellationToken cancellationToken);
-    public Task<Item> CreateItem(CreateItemCommand command, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Item>> GetAllAsync(CancellationToken cancellationToken);
+    Task<Item?> GetByIdAsync(int id, CancellationToken cancellationToken);
+    Task<bool> IsUsedInOrdersAsync(int id, CancellationToken cancellationToken);
+    Task AddAsync(Item item, CancellationToken cancellationToken);
+    Task UpdateAsync(Item item, CancellationToken cancellationToken);
+    Task DeleteAsync(Item item, CancellationToken cancellationToken);
 }

@@ -3,30 +3,40 @@
     "id": 1,
     "productName": "trophy stand",
     "weight": 40,
+    "printDurationMinutes": 150,
+    "details": "Base for a small trophy, printed upright.",
     "pricePerUnit": 24.50
   },
   {
     "id": 2,
     "productName": "statue",
     "weight": 35,
+    "printDurationMinutes": 180,
+    "details": "Decorative statue, needs supports.",
     "pricePerUnit": 27.00
   },
   {
     "id": 3,
     "productName": "toy",
     "weight": 200,
+    "printDurationMinutes": 480,
+    "details": "Large toy figure.",
     "pricePerUnit": 23.00
   },
   {
     "id": 4,
     "productName": "car",
     "weight": 10,
+    "printDurationMinutes": 45,
+    "details": "Small toy car.",
     "pricePerUnit": 26.75
   },
   {
     "id": 5,
     "productName": "keychain",
     "weight": 6,
+    "printDurationMinutes": 20,
+    "details": "Keychain with a custom name.",
     "pricePerUnit": 22.00
   }
 ]

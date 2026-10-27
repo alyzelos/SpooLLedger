@@ -1,0 +1,114 @@
+<div class="p-6">
+  <p-card header="Items">
+    <div class="mb-4">
+      <button pButton type="button" icon="pi pi-plus" label="Add" (click)="add()"></button>
+    </div>
+
+    @if (error()) {
+      <p>{{ error() }}</p>
+    } @else if (items() === null) {
+      <p>Loading items...</p>
+    } @else if (items()!.length === 0) {
+      <p>No items yet.</p>
+    } @else {
+      <p-table [value]="items()!" dataKey="id" [tableStyle]="{ 'min-width': '55rem' }">
+        <ng-template #header>
+          <tr>
+            <th>Product</th>
+            <th>Weight</th>
+            <th>Print time</th>
+            <th>Price</th>
+            <th>Details</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item>
+          <tr>
+            <td>{{ item.productName }}</td>
+            <td>{{ item.weight }} g</td>
+            <td>{{ formatDuration(item.printDurationMinutes) }}</td>
+            <td>
+              @if (item.pricePerUnit !== null) {
+                {{ item.pricePerUnit | currency: 'EUR' }}
+              } @else {
+                <span class="text-surface-500">Not set</span>
+              }
+            </td>
+            <td class="details">{{ item.details }}</td>
+            <td class="whitespace-nowrap">
+              @if (item.pricePerUnit === null) {
+                <button
+                  pButton
+                  type="button"
+                  [text]="true"
+                  [rounded]="true"
+                  severity="success"
+                  icon="pi pi-calculator"
+                  aria-label="Calculate price"
+                  pTooltip="Calculate price"
+                  tooltipPosition="top"
+                  (click)="calculatePrice(item)"
+                ></button>
+              }
+              <button pButton type="button" [text]="true" [rounded]="true" icon="pi pi-pencil" aria-label="Edit" (click)="edit(item)"></button>
+              <button pButton type="button" [text]="true" [rounded]="true" severity="danger" icon="pi pi-trash" aria-label="Delete" (click)="delete(item)"></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </p-card>
+</div>
+
+<p-dialog
+  [header]="editingId() === null ? 'Add item' : 'Edit item'"
+  [visible]="dialogVisible()"
+  (visibleChange)="dialogVisible.set($event)"
+  [modal]="true"
+  [style]="{ width: '28rem' }"
+>
+  <form [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="productName">Product name</label>
+      <input pInputText id="productName" formControlName="productName" maxlength="100" [invalid]="invalid('productName')" />
+      @if (invalid('productName')) {
+        <small class="text-red-500">Product name is required.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="weight">Weight (grams)</label>
+      <p-inputnumber inputId="weight" formControlName="weight" [min]="0" suffix=" g" [invalid]="invalid('weight')" />
+      @if (invalid('weight')) {
+        <small class="text-red-500">Weight must be greater than zero.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="hours">Print time</label>
+      <div class="flex gap-2">
+        <p-inputnumber inputId="hours" formControlName="hours" [min]="0" suffix=" h" [invalid]="durationMissing()" />
+        <p-inputnumber inputId="minutes" formControlName="minutes" [min]="0" [max]="59" suffix=" min" [invalid]="durationMissing()" />
+      </div>
+      @if (durationMissing()) {
+        <small class="text-red-500">Print time must be greater than zero.</small>
+      }
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <label for="details">Details</label>
+      <textarea pTextarea id="details" formControlName="details" rows="3" maxlength="1000" [invalid]="invalid('details')"></textarea>
+    </div>
+
+    @if (saveError()) {
+      <small class="text-red-500">{{ saveError() }}</small>
+    }
+
+    <div class="flex justify-end gap-2">
+      <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="dialogVisible.set(false)"></button>
+      <button pButton type="submit" label="Save" icon="pi pi-check" [loading]="saving()"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-confirmdialog />
