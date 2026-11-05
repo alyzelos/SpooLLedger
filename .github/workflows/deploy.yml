@@ -1,0 +1,75 @@
+name: 🚀 Deploy SpoolLedger
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  deploy:
+    runs-on: self-hosted 
+
+    steps:
+    # 1. Download the latest code into the _work folder
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      
+   # 2. Build the .NET Backend
+    - name: Stop Running Backend Service
+      shell: cmd
+      run: |
+         :: 1. Stop the Windows Service if it is active
+          sc query SpooLLedgerBE | findstr RUNNING
+          if %errorlevel% equ 0 (
+            echo Service is running. Stopping it now...
+            sc stop SpooLLedgerBE
+          ) else (
+            echo Service is not running as a Windows Service.
+          )
+          :: 2. FORCE KILL any stray background API processes to release file locks
+          echo Killing any background instances of API.exe...
+          taskkill /F /IM API.exe /T 2>nul || echo No active API processes found.
+          :: 3. Give Windows a moment to release the file handles
+          ping 127.0.0.1 -n 4 > nul
+      
+    - name: Publish .NET Backend
+      shell: cmd  
+      run: |
+        dotnet publish ./SpooLLedger/SpooLLedger.csproj -c Release -o C:\MyApps\SpooLLedger\SpooLLedger\backend --nologo
+
+    # 3. Build the Angular Frontend
+    # name: Setup Node.js
+    # uses: actions/setup-node@v4
+    #with:
+      # node-version: '22.13.1'
+
+    - name: Install Angular Dependencies & Build
+      shell: cmd  
+      run: |
+        cd client
+        echo "=== Installing Dependencies ==="
+        call npm install
+        if %errorlevel% neq 0 (
+            echo "NPM Install Failed!"
+            exit /b %errorlevel%
+        )
+        echo "=== Building Angular App ==="
+        call npm run build
+        if %errorlevel% neq 0 (
+            echo "Angular Build Failed!"
+            exit /b %errorlevel%
+        )
+        echo "=== Copying Files ==="
+        if not exist C:\MyApps\SpooLLedger\frontend mkdir C:\MyApps\SpooLLedger\frontend
+        xcopy /E /Y /I dist\client\browser\* C:\MyApps\SpooLLedger\frontend\
+        
+      # npm run build 
+      # if not exist C:\MyApps\ExpenseApp\frontend mkdir C:\MyApps\ExpenseApp\frontend
+      # xcopy /E /Y /I dist\client\browser\* C:\MyApps\ExpenseApp\frontend\
+        
+    # 4. Start the Backend Back Up
+    - name: Start Backend Service
+      shell: cmd
+      run: sc start SpooLLedgerBE
+        
+    - name: Deployment Completed
+      shell: cmd
+      run: echo "Application successfully compiled and deployed to C:\MyApps\SpooLLedger!"
