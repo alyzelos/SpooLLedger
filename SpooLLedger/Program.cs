@@ -1,3 +1,4 @@
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SpooLLedger.Application;
 using SpooLLedger.Application.Abstractions;
@@ -8,7 +9,7 @@ using SpooLLedger.Infrastructure.Data.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.UseUrls("http://localhost:5100;https://localhost:5101");
+builder.Host.UseWindowsService();
 
 // Add services to the container.
 
@@ -20,13 +21,19 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddDbContext<DataContext>(opt =>
 {
-   opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")); 
+   var configured = builder.Configuration.GetConnectionString("DefaultConnection")
+      ?? "Data Source=stock.db";
+   var sqlite = new SqliteConnectionStringBuilder(configured);
+   if (!Path.IsPathRooted(sqlite.DataSource))
+   {
+      sqlite.DataSource = Path.Combine(builder.Environment.ContentRootPath, sqlite.DataSource);
+   }
+
+   opt.UseSqlite(sqlite.ToString());
 });
 
 builder.Services.AddCors();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-// builder.WebHost.UseUrls("http://127.0.0.5:5100");
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -56,10 +63,12 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
 app.UseCors(x=> x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200"));
-app.UseHttpsRedirection();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 app.Run();

@@ -1,75 +1,69 @@
 name: 🚀 Deploy SpoolLedger
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   deploy:
-    runs-on: self-hosted 
+    runs-on: self-hosted
 
     steps:
-    # 1. Download the latest code into the _work folder
     - name: Checkout Code
       uses: actions/checkout@v4
-      
-   # 2. Build the .NET Backend
+
     - name: Stop Running Backend Service
       shell: cmd
       run: |
-         :: 1. Stop the Windows Service if it is active
-          sc query SpooLLedgerBE | findstr RUNNING
-          if %errorlevel% equ 0 (
-            echo Service is running. Stopping it now...
-            sc stop SpooLLedgerBE
-          ) else (
-            echo Service is not running as a Windows Service.
-          )
-          :: 2. FORCE KILL any stray background API processes to release file locks
-          echo Killing any background instances of API.exe...
-          taskkill /F /IM SpooLLedger.exe /T 2>nul || echo No active API processes found.
-          :: 3. Give Windows a moment to release the file handles
-          ping 127.0.0.10 -n 4 > nul
-      
+        sc query SpooLLedgerBE | findstr /C:"STATE" | findstr RUNNING
+        if %errorlevel% equ 0 (
+          echo Stopping SpooLLedgerBE...
+          sc stop SpooLLedgerBE
+          set /a tries=0
+          :waitstop
+          set /a tries+=1
+          if %tries% gtr 30 exit /b 1
+          ping 127.0.0.1 -n 3 > nul
+          sc query SpooLLedgerBE | findstr /C:"STOPPED"
+          if errorlevel 1 goto waitstop
+        ) else (
+          echo SpooLLedgerBE is not running.
+        )
+        taskkill /F /IM SpooLLedger.exe /T 2>nul
+        echo Cleared any leftover SpooLLedger.exe processes.
+
     - name: Publish .NET Backend
-      shell: cmd  
+      shell: cmd
       run: |
         dotnet publish ./SpooLLedger/SpooLLedger.csproj -c Release -o C:\MyApps\SpooLLedger\SpooLLedger\backend --nologo
+        if %errorlevel% neq 0 exit /b %errorlevel%
+        sc config SpooLLedgerBE binPath= "C:\MyApps\SpooLLedger\SpooLLedger\backend\SpooLLedger.exe"
+        if %errorlevel% neq 0 exit /b %errorlevel%
 
-    # 3. Build the Angular Frontend
-    # name: Setup Node.js
-    # uses: actions/setup-node@v4
-    #with:
-      # node-version: '22.13.1'
-
-    - name: Install Angular Dependencies & Build
-      shell: cmd  
+    - name: Install Angular Dependencies and Build
+      shell: cmd
       run: |
         cd client
-        echo "=== Installing Dependencies ==="
         call npm install
-        if %errorlevel% neq 0 (
-            echo "NPM Install Failed!"
-            exit /b %errorlevel%
-        )
-        echo "=== Building Angular App ==="
+        if %errorlevel% neq 0 exit /b %errorlevel%
         call npm run build
-        if %errorlevel% neq 0 (
-            echo "Angular Build Failed!"
-            exit /b %errorlevel%
-        )
-        echo "=== Copying Files ==="
-        if not exist C:\MyApps\SpooLLedger\frontend mkdir C:\MyApps\SpooLLedger\frontend
-        xcopy /E /Y /I dist\client\browser\* C:\MyApps\SpooLLedger\frontend\
-        
-      # npm run build 
-      # if not exist C:\MyApps\ExpenseApp\frontend mkdir C:\MyApps\ExpenseApp\frontend
-      # xcopy /E /Y /I dist\client\browser\* C:\MyApps\ExpenseApp\frontend\
-        
-    # 4. Start the Backend Back Up
+        if %errorlevel% neq 0 exit /b %errorlevel%
+        if not exist C:\MyApps\SpooLLedger\SpooLLedger\backend\wwwroot mkdir C:\MyApps\SpooLLedger\SpooLLedger\backend\wwwroot
+        xcopy /E /Y /I dist\client\browser\* C:\MyApps\SpooLLedger\SpooLLedger\backend\wwwroot\
+        if %errorlevel% geq 4 exit /b %errorlevel%
+
     - name: Start Backend Service
       shell: cmd
-      run: sc start SpooLLedgerBE
-        
+      run: |
+        sc start SpooLLedgerBE
+        if %errorlevel% neq 0 exit /b %errorlevel%
+        set /a tries=0
+        :waitstart
+        set /a tries+=1
+        if %tries% gtr 30 exit /b 1
+        ping 127.0.0.1 -n 3 > nul
+        sc query SpooLLedgerBE | findstr /C:"RUNNING"
+        if errorlevel 1 goto waitstart
+
     - name: Deployment Completed
       shell: cmd
-      run: echo "Application successfully compiled and deployed to C:\MyApps\SpooLLedger!"
+      run: echo Application deployed to C:\MyApps\SpooLLedger\SpooLLedger\backend and SpooLLedgerBE is running.
