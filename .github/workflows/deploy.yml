@@ -28,7 +28,7 @@ jobs:
           echo Killing any background instances of API.exe...
           taskkill /F /IM SpooLLedger.exe /T 2>nul || echo No active API processes found.
           :: 3. Give Windows a moment to release the file handles
-          ping 127.0.0.1 -n 4 > nul
+          ping 127.0.0.5 -n 4 > nul
       
     - name: Publish .NET Backend
       shell: cmd  
