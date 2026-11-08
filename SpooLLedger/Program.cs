@@ -62,7 +62,7 @@ using (var scope = app.Services.CreateScope())
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
-app.UseCors(x=> x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseDefaultFiles();
 app.UseStaticFiles();
 

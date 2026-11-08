@@ -58,12 +58,8 @@ jobs:
             exit /b %errorlevel%
         )
         echo "=== Copying Files ==="
-        if not exist C:\MyApps\SpooLLedger\frontend mkdir C:\MyApps\SpooLLedger\frontend
-        xcopy /E /Y /I dist\client\browser\* C:\MyApps\SpooLLedger\frontend\
-        
-      # npm run build 
-      # if not exist C:\MyApps\ExpenseApp\frontend mkdir C:\MyApps\ExpenseApp\frontend
-      # xcopy /E /Y /I dist\client\browser\* C:\MyApps\ExpenseApp\frontend\
+        if not exist C:\MyApps\SpooLLedger\SpooLLedger\backend\wwwroot mkdir C:\MyApps\SpooLLedger\SpooLLedger\backend\wwwroot
+        xcopy /E /Y /I dist\client\browser\* C:\MyApps\SpooLLedger\SpooLLedger\backend\wwwroot\
         
     # 4. Start the Backend Back Up
     - name: Start Backend Service
