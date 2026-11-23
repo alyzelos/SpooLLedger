@@ -270,7 +270,7 @@
   <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()" class="flex flex-col gap-4">
     <input pInputText formControlName="firstName" placeholder="First name" maxlength="100" />
     <input pInputText formControlName="lastName" placeholder="Last name" maxlength="100" />
-    <input pInputText type="email" formControlName="email" placeholder="Email" maxlength="200" />
+    <input pInputText formControlName="email" placeholder="Email" maxlength="200" />
     <input pInputText formControlName="phoneNumber" placeholder="Phone" maxlength="30" />
     @if (customerError()) {
       <small class="text-red-500">{{ customerError() }}</small>

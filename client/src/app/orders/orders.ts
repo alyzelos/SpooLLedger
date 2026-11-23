@@ -89,7 +89,7 @@ export class OrdersPage implements OnInit {
   protected readonly customerForm = this.fb.nonNullable.group({
     firstName: ['', [Validators.required, Validators.maxLength(100)]],
     lastName: ['', [Validators.required, Validators.maxLength(100)]],
-    email: ['', [Validators.required, Validators.email, Validators.maxLength(200)]],
+    email: ['', [Validators.maxLength(200)]],
     phoneNumber: ['', [Validators.required, Validators.maxLength(30)]],
   });
 

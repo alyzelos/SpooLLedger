@@ -48,16 +48,15 @@ public class CustomerTests
     }
 
     [Fact]
-    public async Task CreateValidator_RejectsInvalidEmail()
+    public async Task CreateValidator_AllowsEmptyEmail()
     {
         // Arrange
         var validator = new CreateCustomerValidator();
 
         // Act
-        var result = await validator.ValidateAsync(new CreateCustomerCommand("Ada", "Lovelace", "not-an-email", "1", true));
+        var result = await validator.ValidateAsync(new CreateCustomerCommand("Ada", "Lovelace", "", "1", true));
 
         // Assert
-        Assert.False(result.IsValid);
-        Assert.Contains(result.Errors, e => e.PropertyName == nameof(CreateCustomerCommand.Email));
+        Assert.True(result.IsValid);
     }
 }

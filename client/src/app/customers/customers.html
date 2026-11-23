@@ -1,3 +1,4 @@
+<div class="p-6">
 <p-card header="Customers">
   <div class="mb-4">
     <button pButton type="button" icon="pi pi-plus" label="Add" (click)="add()"></button>
@@ -44,6 +45,7 @@
     </p-table>
   }
 </p-card>
+</div>
 
 <p-dialog
   [header]="editingId() === null ? 'Add customer' : 'Edit customer'"
@@ -63,7 +65,7 @@
     </div>
     <div class="flex flex-col gap-1">
       <label for="email">Email</label>
-      <input pInputText id="email" type="email" formControlName="email" maxlength="200" [invalid]="invalid('email')" />
+      <input pInputText id="email" formControlName="email" maxlength="200" />
     </div>
     <div class="flex flex-col gap-1">
       <label for="phoneNumber">Phone</label>

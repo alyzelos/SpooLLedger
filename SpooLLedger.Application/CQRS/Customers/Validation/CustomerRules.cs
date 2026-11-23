@@ -12,7 +12,7 @@ public static class CustomerRules
     {
         firstName.NotEmpty().MaximumLength(100);
         lastName.NotEmpty().MaximumLength(100);
-        email.NotEmpty().MaximumLength(200).EmailAddress();
+        email.MaximumLength(200);
         phoneNumber.NotEmpty().MaximumLength(30);
     }
 }

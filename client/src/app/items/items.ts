@@ -13,7 +13,6 @@ import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TextareaModule } from 'primeng/textarea';
 import { TooltipModule } from 'primeng/tooltip';
-import { CustomersCard } from '../customers/customers';
 import { FilamentStockPage } from '../filament-stock/filament-stock';
 import { FilamentTypesCard } from '../filament-types/filament-types';
 import { Item, ItemInput, ItemsService } from './items.service';
@@ -25,7 +24,6 @@ import { Pricing, PricingService } from '../pricing/pricing.service';
     ButtonModule,
     CardModule,
     ConfirmDialogModule,
-    CustomersCard,
     FilamentTypesCard,
     FilamentStockPage,
     CurrencyPipe,

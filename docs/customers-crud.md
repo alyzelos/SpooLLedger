@@ -6,7 +6,7 @@ A customer is the person an order belongs to. Listing and reading one customer a
 
 ## Fields
 
-First name, last name, email, and phone are required. Names are at most 100 characters, email at most 200 and must be an email address, and phone at most 30. `isActive` is a flag. `createdAt` is set when the customer is created and is not changed by an update.
+First name, last name, and phone are required. Names are at most 100 characters, phone at most 30, and email at most 200. Email may be empty. `isActive` is a flag. `createdAt` is set when the customer is created and is not changed by an update.
 
 ## Endpoints
 
@@ -22,7 +22,7 @@ Orders reference a customer with `DeleteBehavior.Restrict`. `DeleteCustomerHandl
 
 ## Angular page
 
-The Resources page shows a Customers card under the Items card. The table paginates at 5 rows and offers 5, 10, 15, and 20. Each row has edit and delete buttons. Add and edit share one dialog.
+The Customers page shows the Customers card. The table paginates at 5 rows and offers 5, 10, 15, and 20. Each row has edit and delete buttons. Add and edit share one dialog.
 
 ## Where the pieces live
 
@@ -30,4 +30,4 @@ The Resources page shows a Customers card under the Items card. The table pagina
 - Commands and mapper: `SpooLLedger.Application/CQRS/Customers`
 - Controller: `SpooLLedger/Controllers/CustomersController.cs`
 - Tests: `SpooLLedger.Tests/CustomerTests.cs`
-- Angular card: `client/src/app/customers`, shown from `client/src/app/items/items.html`
+- Angular card: `client/src/app/customers`, routed from `/customers`. Orders can also add a customer from its dialog.
