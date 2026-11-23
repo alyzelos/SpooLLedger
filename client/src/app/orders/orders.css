@@ -99,6 +99,10 @@
   gap: 0.25rem;
 }
 
+.order-row:not(:first-child) td {
+  border-top: 3px solid var(--p-primary-color);
+}
+
 .order-summary {
   display: flex;
   flex-wrap: wrap;

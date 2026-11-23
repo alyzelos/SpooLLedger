@@ -65,7 +65,7 @@
           </tr>
         </ng-template>
         <ng-template #body let-order let-expanded="expanded">
-          <tr>
+          <tr class="order-row">
             <td>
               <button pButton type="button" [pRowToggler]="order" [text]="true" [rounded]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" aria-label="Toggle order lines"></button>
             </td>
