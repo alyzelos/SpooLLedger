@@ -78,7 +78,7 @@ Producer, type, and color are required and limited to 100 characters. Quantity m
 
 Type is chosen from the `FilamentTypes` table, not typed freely. `FilamentStock.Type` is still a text column holding the type name, with no foreign key. The create and update validators call `IFilamentTypeRepository.ExistsAsync` and reject a name that is not in the table with HTTP 400.
 
-`FilamentTypesController` lists, creates, updates, and deletes types. The name is required, at most 100 characters, and unique. Deleting a type that a stock row still uses returns 409. Renaming a type also renames that text on the stock rows and order lines that use it, in the same save. The stock dialog and the Resources page both read this list. The Resources page shows a Filament types card between Customers and Items, with add, edit, delete, and the same 5, 10, 15, and 20 page sizes.
+`FilamentTypesController` lists, creates, updates, and deletes types. The name is required, at most 100 characters, and unique. Deleting a type that a stock row still uses returns 409. Renaming a type also renames that text on the stock rows and order lines that use it, in the same save. The stock dialog and the Resources page both read this list. The Resources page shows a Filament types card, with add, edit, delete, and the same 5, 10, 15, and 20 page sizes. Items have their own toolbar page.
 
 `DataSeeder.SeedFilamentTypes` fills the table from `FilamentType.json` on startup when it is empty, before the stock seed runs. The seed holds PLA, PET-G, ASA, ABS, and TPU. Names are unique.
 
