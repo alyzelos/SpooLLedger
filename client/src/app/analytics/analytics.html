@@ -1,0 +1,51 @@
+<div class="p-6 flex flex-col gap-6">
+  <p-card header="Top printed items">
+    @if (error()) {
+      <p>{{ error() }}</p>
+    } @else if (items() === null) {
+      <p>Loading items...</p>
+    } @else if (items()!.length === 0) {
+      <p>No printed items yet.</p>
+    } @else {
+      <p-table [value]="items()!" [paginator]="true" [rows]="10" [rowsPerPageOptions]="pageSizes" [tableStyle]="{ 'min-width': '30rem' }">
+        <ng-template #header>
+          <tr>
+            <th>Product</th>
+            <th>Pieces</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item>
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.pieces }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </p-card>
+
+  <p-card header="Top color">
+    @if (error()) {
+      <p>{{ error() }}</p>
+    } @else if (colors() === null) {
+      <p>Loading colors...</p>
+    } @else if (colors()!.length === 0) {
+      <p>No colors used yet.</p>
+    } @else {
+      <p-table [value]="colors()!" [paginator]="true" [rows]="10" [rowsPerPageOptions]="pageSizes" [tableStyle]="{ 'min-width': '30rem' }">
+        <ng-template #header>
+          <tr>
+            <th>Color</th>
+            <th>Pieces</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-color>
+          <tr>
+            <td>{{ color.name }}</td>
+            <td>{{ color.pieces }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    }
+  </p-card>
+</div>
