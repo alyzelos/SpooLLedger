@@ -9,7 +9,8 @@ public class UpdateOrderValidator : AbstractValidator<UpdateOrderCommand>
     public UpdateOrderValidator(
         IFilamentTypeRepository filamentTypes,
         IFilamentColorRepository filamentColors,
-        IPricingRepository pricings)
+        IPricingRepository pricings,
+        IOrderRepository orders)
     {
         RuleFor(c => c.OrderNumber).GreaterThan(0);
         RuleFor(c => c.OrderDate).NotEmpty();
@@ -23,9 +24,6 @@ public class UpdateOrderValidator : AbstractValidator<UpdateOrderCommand>
         {
             line.RuleFor(item => item.ItemId).GreaterThan(0);
             line.RuleFor(item => item.FilamentType).NotEmpty().MaximumLength(100);
-            line.RuleFor(item => item.FilamentType)
-                .MustAsync((type, cancellationToken) => filamentTypes.ExistsAsync((type ?? "").Trim(), cancellationToken))
-                .WithMessage("Choose a filament type that exists.");
             line.RuleFor(item => item.Color).NotEmpty().MaximumLength(100);
             line.RuleFor(item => item.Color)
                 .MustAsync((color, cancellationToken) => filamentColors.ExistsAsync((color ?? "").Trim(), cancellationToken))
@@ -35,6 +33,24 @@ public class UpdateOrderValidator : AbstractValidator<UpdateOrderCommand>
             line.RuleFor(item => item.CompletedQuantity)
                 .LessThanOrEqualTo(item => item.Quantity)
                 .WithMessage("Completed pieces cannot exceed the number ordered.");
+        });
+
+        RuleFor(command => command.Items).CustomAsync(async (items, context, cancellationToken) =>
+        {
+            var command = (UpdateOrderCommand)context.InstanceToValidate;
+            var order = await orders.GetByOrderNumber(command.OrderNumber, cancellationToken);
+            var stored = order.Items
+                .Select(line => (line.FilamentType ?? "").Trim())
+                .ToHashSet();
+
+            foreach (var item in items)
+            {
+                var type = (item.FilamentType ?? "").Trim();
+                if (stored.Contains(type) || await filamentTypes.ExistsAsync(type, cancellationToken))
+                    continue;
+
+                context.AddFailure("Choose a filament type that exists.");
+            }
         });
     }
 }

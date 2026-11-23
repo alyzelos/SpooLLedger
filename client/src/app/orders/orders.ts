@@ -279,6 +279,21 @@ export class OrdersPage implements OnInit {
     this.lineError.set(null);
   }
 
+  protected lineTypeOptions(): FilamentType[] {
+    const current = this.lineFilamentType();
+    const options = this.filamentTypes();
+    if (current && !options.some((type) => type.name === current)) {
+      return [{ id: 0, name: current }, ...options];
+    }
+    return options;
+  }
+
+  protected keepFilamentType(value: string | null): void {
+    if (value) {
+      this.lineFilamentType.set(value);
+    }
+  }
+
   protected startLineEdit(order: Order, line: Order['items'][number]): void {
     this.draftOrder.set(null);
     this.lineEdit.set({ orderNumber: order.orderNumber, itemId: line.itemId, filamentType: line.filamentType, color: line.color });

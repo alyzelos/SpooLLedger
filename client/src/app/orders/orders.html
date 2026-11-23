@@ -110,7 +110,7 @@
                         <td colspan="8">
                           <div class="flex flex-wrap items-center gap-2">
                             <p-select [options]="items()" optionLabel="productName" optionValue="id" placeholder="Select an item" [filter]="true" filterBy="productName" appendTo="body" [ngModel]="lineItemId()" (ngModelChange)="lineItemId.set($event)" />
-                            <p-select [options]="filamentTypes()" optionLabel="name" optionValue="name" placeholder="Filament" appendTo="body" [ngModel]="lineFilamentType()" (ngModelChange)="lineFilamentType.set($event)" />
+                            <p-select [options]="lineTypeOptions()" optionLabel="name" optionValue="name" placeholder="Filament" appendTo="body" [ngModel]="lineFilamentType()" (ngModelChange)="keepFilamentType($event)" />
                             <p-select [options]="filamentColors()" optionLabel="name" optionValue="name" placeholder="Color" appendTo="body" [ngModel]="lineColor()" (ngModelChange)="lineColor.set($event)" />
                             <p-inputnumber [ngModel]="lineQuantity()" (ngModelChange)="lineQuantity.set($event)" [min]="1" [showButtons]="true" suffix=" pcs" />
                             <p-inputnumber [ngModel]="lineCompleted()" (ngModelChange)="lineCompleted.set($event)" [min]="0" [max]="lineQuantity() || 1" [showButtons]="true" suffix=" done" />
@@ -147,7 +147,7 @@
                       <td colspan="8">
                         <div class="flex flex-wrap items-center gap-2">
                           <p-select [options]="items()" optionLabel="productName" optionValue="id" placeholder="Select an item" [filter]="true" filterBy="productName" appendTo="body" [ngModel]="lineItemId()" (ngModelChange)="lineItemId.set($event)" />
-                          <p-select [options]="filamentTypes()" optionLabel="name" optionValue="name" placeholder="Filament" appendTo="body" [ngModel]="lineFilamentType()" (ngModelChange)="lineFilamentType.set($event)" />
+                          <p-select [options]="lineTypeOptions()" optionLabel="name" optionValue="name" placeholder="Filament" appendTo="body" [ngModel]="lineFilamentType()" (ngModelChange)="keepFilamentType($event)" />
                           <p-select [options]="filamentColors()" optionLabel="name" optionValue="name" placeholder="Color" appendTo="body" [ngModel]="lineColor()" (ngModelChange)="lineColor.set($event)" />
                           <p-inputnumber [ngModel]="lineQuantity()" (ngModelChange)="lineQuantity.set($event)" [min]="1" [showButtons]="true" suffix=" pcs" />
                           <button pButton type="button" icon="pi pi-check" label="Save" [loading]="savingLine()" (click)="saveLine(order)"></button>

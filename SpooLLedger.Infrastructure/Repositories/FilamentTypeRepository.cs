@@ -37,6 +37,12 @@ public class FilamentTypeRepository(DataContext context) : IFilamentTypeReposito
                 .ToListAsync(cancellationToken);
             foreach (var stock in stocks)
                 stock.Type = type.Name;
+
+            var lines = await context.OrderItems
+                .Where(line => line.FilamentType == previousName)
+                .ToListAsync(cancellationToken);
+            foreach (var line in lines)
+                line.FilamentType = type.Name;
         }
 
         context.FilamentTypes.Update(type);
