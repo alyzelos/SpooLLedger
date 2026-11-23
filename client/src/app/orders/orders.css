@@ -18,7 +18,7 @@
 .queue-section + .queue-section {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #9ca3af;
+  border-top: 3px solid var(--p-primary-color);
 }
 
 .section-title {
