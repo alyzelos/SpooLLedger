@@ -73,16 +73,20 @@
 
     <div class="flex flex-col gap-1">
       <label for="color">Color</label>
-      <p-select
-        inputId="color"
-        formControlName="color"
-        [options]="colors()"
-        optionLabel="name"
-        optionValue="name"
-        placeholder="Select a color"
-        appendTo="body"
-        [invalid]="invalid('color')"
-      />
+      <div class="flex gap-2">
+        <p-select
+          class="flex-1"
+          inputId="color"
+          formControlName="color"
+          [options]="colors()"
+          optionLabel="name"
+          optionValue="name"
+          placeholder="Select a color"
+          appendTo="body"
+          [invalid]="invalid('color')"
+        />
+        <button pButton type="button" icon="pi pi-plus" label="New" (click)="openColor()"></button>
+      </div>
       @if (invalid('color')) {
         <small class="text-red-500">Select a filament color.</small>
       }
@@ -103,6 +107,22 @@
     <div class="flex justify-end gap-2">
       <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="dialogVisible.set(false)"></button>
       <button pButton type="submit" label="Save" icon="pi pi-check" [loading]="saving()"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog header="New color" [visible]="colorDialogVisible()" (visibleChange)="colorDialogVisible.set($event)" [modal]="true" [style]="{ width: '24rem' }">
+  <form [formGroup]="colorForm" (ngSubmit)="saveColor()" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-1">
+      <label for="newColorName">Name</label>
+      <input pInputText id="newColorName" formControlName="name" maxlength="100" />
+    </div>
+    @if (colorError()) {
+      <small class="text-red-500">{{ colorError() }}</small>
+    }
+    <div class="flex justify-end gap-2">
+      <button pButton type="button" label="Cancel" severity="secondary" [text]="true" (click)="colorDialogVisible.set(false)"></button>
+      <button pButton type="submit" label="Add" icon="pi pi-check" [loading]="savingColor()"></button>
     </div>
   </form>
 </p-dialog>

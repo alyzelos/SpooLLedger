@@ -84,7 +84,20 @@ Type is chosen from the `FilamentTypes` table, not typed freely. `FilamentStock.
 
 ## Filament colors
 
-Color is chosen from the `FilamentColors` table. `FilamentStock.Color` stays a text column holding the color name, with no foreign key. The create and update validators call `IFilamentColorRepository.ExistsAsync` and reject a name that is not in the table with HTTP 400. `GET /api/filament-colors` returns the list. `DataSeeder.SeedFilamentColors` fills the table from `FilamentColor.json` when it is empty, after types and before stock. The seed holds Oh My Gold, Azure Blue, Lipstick Red, and Blend My Silverness. Names are unique.
+Color is chosen from the `FilamentColors` table. `FilamentStock.Color` stays a text column holding the color name, with no foreign key. The create and update validators call `IFilamentColorRepository.ExistsAsync` and reject a name that is not in the table with HTTP 400.
+
+`FilamentColorsController` lists, creates, updates, and deletes colors. The name is required, at most 100 characters, and unique. Deleting a color that a stock row still uses returns 409. Renaming a color also renames that text on the stock rows that use it, in the same save.
+
+| Method | Path | Result |
+| --- | --- | --- |
+| GET | `/api/filament-colors` | List of filament colors, sorted by name |
+| POST | `/api/filament-colors` | Created color, or 400 when validation fails |
+| PUT | `/api/filament-colors/{id}` | Updated color, 404 when missing, or 400 when validation fails |
+| DELETE | `/api/filament-colors/{id}` | 204, 404 when missing, or 409 when stock uses the color |
+
+The stock dialog and the Resources page both read this list. The stock dialog can add a color without leaving the form, and that new color is selected. The Resources page shows a Filament colors card after Filament types, with add, edit, delete, and the same 5, 10, 15, and 20 page sizes.
+
+`DataSeeder.SeedFilamentColors` fills the table from `FilamentColor.json` when it is empty, after types and before stock. The seed holds Oh My Gold, Azure Blue, Lipstick Red, and Blend My Silverness. Names are unique.
 
 The API listens on `http://localhost:5100` from `launchSettings.json`.
 

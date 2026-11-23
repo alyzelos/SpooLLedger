@@ -11,6 +11,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
+import { FilamentColor, FilamentColorsService } from '../filament-colors/filament-colors.service';
 import {
   FilamentStock,
   FilamentStockInput,
@@ -38,6 +39,7 @@ import {
 })
 export class FilamentStockPage implements OnInit {
   private readonly filamentStockService = inject(FilamentStockService);
+  private readonly filamentColorsService = inject(FilamentColorsService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly fb = inject(FormBuilder);
 
@@ -45,7 +47,10 @@ export class FilamentStockPage implements OnInit {
   protected readonly stock = signal<FilamentStock[] | null>(null);
   protected readonly error = signal<string | null>(null);
   protected readonly types = signal<FilamentType[]>([]);
-  protected readonly colors = signal<FilamentType[]>([]);
+  protected readonly colors = signal<FilamentColor[]>([]);
+  protected readonly colorDialogVisible = signal(false);
+  protected readonly savingColor = signal(false);
+  protected readonly colorError = signal<string | null>(null);
   protected readonly dialogVisible = signal(false);
   protected readonly editingId = signal<number | null>(null);
   protected readonly saving = signal(false);
@@ -56,6 +61,10 @@ export class FilamentStockPage implements OnInit {
     type: ['', [Validators.required, Validators.maxLength(100)]],
     color: ['', [Validators.required, Validators.maxLength(100)]],
     quantity: [0, [Validators.required, Validators.min(0)]],
+  });
+
+  protected readonly colorForm = this.fb.nonNullable.group({
+    name: ['', [Validators.required, Validators.maxLength(100)]],
   });
 
   ngOnInit(): void {
@@ -79,6 +88,34 @@ export class FilamentStockPage implements OnInit {
       quantity: item.quantity,
     });
     this.openDialog();
+  }
+
+  protected openColor(): void {
+    this.colorForm.reset();
+    this.colorError.set(null);
+    this.colorDialogVisible.set(true);
+  }
+
+  protected saveColor(): void {
+    if (this.colorForm.invalid) {
+      this.colorForm.markAllAsTouched();
+      return;
+    }
+
+    const name = this.colorForm.getRawValue().name.trim();
+    this.savingColor.set(true);
+    this.filamentColorsService.create(name).subscribe({
+      next: (created) => {
+        this.savingColor.set(false);
+        this.colors.update((current) => [...current, created].sort((a, b) => a.name.localeCompare(b.name)));
+        this.form.controls.color.setValue(created.name);
+        this.colorDialogVisible.set(false);
+      },
+      error: (response: HttpErrorResponse) => {
+        this.savingColor.set(false);
+        this.colorError.set(this.describeError(response, 'Could not add color.'));
+      },
+    });
   }
 
   protected save(): void {
@@ -178,13 +215,13 @@ export class FilamentStockPage implements OnInit {
     });
   }
 
-  private describeError(response: HttpErrorResponse): string {
+  private describeError(response: HttpErrorResponse, fallback = 'Could not save filament.'): string {
     if (response.status === 400 && response.error?.errors) {
       return Object.values<string[]>(response.error.errors).flat().join(' ');
     }
     if (response.status === 404) {
       return 'This filament no longer exists.';
     }
-    return 'Could not save filament.';
+    return fallback;
   }
 }
