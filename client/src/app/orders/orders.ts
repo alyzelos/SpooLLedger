@@ -51,7 +51,7 @@ export class OrdersPage implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly confirmationService = inject(ConfirmationService);
 
-  protected readonly statuses = ['Pending', 'Printing', 'Shipped', 'Confirmed payment', 'Cancelled'];
+  protected readonly statuses = ['Pending', 'Printing', 'Completed', 'Shipped', 'Confirmed payment', 'Cancelled'];
   protected readonly lineCompleted = signal(0);
 
   protected readonly orders = signal<Order[] | null>(null);
@@ -457,6 +457,7 @@ export class OrdersPage implements OnInit {
     const groups = [
       { label: 'Pending', match: (status: string | null) => status === 'Pending', color: '#9ca3af' },
       { label: 'Printing', match: (status: string | null) => status === 'Printing', color: '#facc15' },
+      { label: 'Completed', match: (status: string | null) => status === 'Completed', color: '#14b8a6' },
       { label: 'Shipped', match: (status: string | null) => status === 'Shipped', color: '#22c55e' },
       {
         label: 'Confirmed payment',
@@ -510,6 +511,7 @@ export class OrdersPage implements OnInit {
     const colors: Record<string, [string, string]> = {
       Pending: ['#e5e7eb', '#374151'],
       Printing: ['#facc15', '#713f12'],
+      Completed: ['#14b8a6', '#042f2e'],
       Shipped: ['#22c55e', '#052e16'],
       'Confirmed payment': ['#38bdf8', '#0c4a6e'],
       Cancelled: ['#ef4444', '#ffffff'],
